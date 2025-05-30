@@ -1,0 +1,134 @@
+﻿#include "IHttpMultiPart.h"
+#include "http/biscuits/IHttpHeader.h"
+#include "http/invalid/IHttpBadRequestInvalid.h"
+#include "http/IRequest.h"
+#include "http/IHttpConstant.h"
+
+$PackageWebCoreBegin
+
+const IHttpMultiPart IHttpMultiPart::Empty;
+const static IStringView FORMDATE_NAME("name=");
+const static IStringView FORMDATA_FILE_NAME("filename=");
+const static IStringView FORMDATA_CHARSET("charset=");
+
+namespace detail
+{
+    IStringViewList concatenateHeaders(const IStringViewList& list, IRequest* request);
+    void resolveHeaders(IHttpMultiPart* self, IStringView data, IRequest* request);
+}
+
+IHttpMultiPart::IHttpMultiPart(IStringView view, IRequest* request)
+{
+    if(view.startWith(IHttp::NEW_LINE)){
+        view = view.substr(2);
+    }
+    view = view.substr(0, view.length()-2); //remove last \r\n
+
+    auto index = view.find(IHttp::NEW_PART);
+    if(index == std::string_view::npos){
+        request->setInvalid(IHttpBadRequestInvalid("multipart has no headers"));
+        return;
+    }
+
+    m_content = view.substr(index+4);
+    detail::resolveHeaders(this, view.substr(0, index), request);
+}
+
+IHttpMultiPart::IHttpMultiPart(IHttpMultiPart &&value)
+{
+    this->operator =(std::move(value));
+}
+
+IHttpMultiPart& IHttpMultiPart::operator =(IHttpMultiPart&& value)
+{
+    this->m_name = value.m_name;
+    this->m_charset = value.m_charset;
+    this->m_content = value.m_content;
+    this->m_encoding = value.m_encoding;
+    this->m_fileName = value.m_fileName;
+    this->m_headers = value.m_headers;
+    this->m_mime = value.m_mime;
+    return *this;
+}
+
+bool IHttpMultiPart::isValid() const
+{
+    return !m_content.empty() && !m_name.empty();
+}
+
+IStringViewList detail::concatenateHeaders(const IStringViewList& list, IRequest* request){
+    IStringViewList ret;
+    if(list.empty()){
+        return ret;
+    }
+
+    int length = list.length();
+    for(int i=length-1; i>=0; i--){
+        auto view = list[i];
+        for(; view[0]==' '; ){
+            i--;
+            if(i==-1){
+                request->setInvalid(IHttpBadRequestInvalid("multipart header error"));
+                return {};
+            }
+            view = request->stash(list[i].toQByteArray() + view.toQByteArray().trimmed());
+        }
+        ret.append(view);
+    }
+    return ret;
+}
+
+void detail::resolveHeaders(IHttpMultiPart* self, IStringView data, IRequest* request)
+{
+    self->m_headers = detail::concatenateHeaders(data.split(IHttp::NEW_LINE), request);
+    for(auto line : self->m_headers){
+        auto index = line.find_first_of(':');
+        if(index == std::string_view::npos){
+            request->setInvalid(IHttpBadRequestInvalid("multipart header error without colon"));
+            return;
+        }
+        IStringView key = line.substr(0, index).trimmed();
+        IStringView value = line.substr(index+1).trimmed();
+
+        if(key == IHttpHeader::ContentDisposition){
+            auto pos = value.find(FORMDATE_NAME);
+            if(pos != std::string_view::npos){
+                self->m_name = value.substr(pos+FORMDATE_NAME.length());
+                if(!self->m_name.empty() && self->m_name.startWith("\"")){
+                    self->m_name = self->m_name.substr(1);
+                    pos = self->m_name.find("\"");
+                    self->m_name = self->m_name.substr(0, pos);
+                }
+            }
+            pos = value.find(FORMDATA_FILE_NAME);
+            if(pos != std::string_view::npos){
+                self->m_fileName = value.substr(pos+FORMDATA_FILE_NAME.length());
+                if(!self->m_fileName.empty() && self->m_fileName.startWith("\"")){
+                    self->m_fileName = self->m_fileName.substr(1, self->m_fileName.length()-2);
+                }
+            }
+
+        }else if(key == IHttpHeader::ContentType){
+            self->m_mime = IHttpMimeUtil::toMime(value);
+            auto pos = value.find(FORMDATA_CHARSET);
+            if(pos != std::string_view::npos){
+                IStringViewList args = value.substr(pos+FORMDATA_CHARSET.length()).split(";");
+                if(args.length() >= 1){
+                    self->m_charset= args.first().trimmed();
+                }
+            }
+        }else if(key ==  IHttpHeader::ContentTransferEncoding){
+            if(value == "7bit"){
+                self->m_encoding = IHttpMultiPart::BIT_7;
+            }else if(value == "8bit"){
+                self->m_encoding = IHttpMultiPart::BIT_8;
+            }else if(value == "binary"){
+                self->m_encoding = IHttpMultiPart::BINARY;
+            }else{
+                request->setInvalid(IHttpBadRequestInvalid("multipart header error with ContentTransferEncoding"));
+            }
+        }
+    }
+}
+
+$PackageWebCoreEnd

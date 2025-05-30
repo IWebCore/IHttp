@@ -1,0 +1,70 @@
+cacheToIncludes(${CMAKE_CURRENT_LIST_DIR})
+
+cacheToSources(
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookieJar.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookiePart.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpHeaderJar.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpManage.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpMultiPart.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpMultiPartJar.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpServer.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpSession.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpTaskCatagory.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IRequest.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/IResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpBadRequestAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpInternalErrorAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpInvalidRequestAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpNotFoundAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpOptionsMethodAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpHeader.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpMethod.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpMime.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpStatus.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpVersion.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/IHttpCallable.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/IHttpReturnType.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/detail/IHttpArgumentTypeDetail.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/detail/IHttpReturnTypeDetail.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerAction.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerActionMapping.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerNode.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/detail/IHttpControllerCallableInfo.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpRequestImpl.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpResponseRaw.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IResponseHeader.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpDefaultProfileTask.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpFileServiceTask.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpPrintTraceTask.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpResolverFactory.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpBadRequestInvalid.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInternalErrorInvalid.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidWare.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpNotFoundInvalid.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPathFragment.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathDetail.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathFragmentDetail.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathValidatorsTask.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IBytesResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IFileResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHtmlResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseInterface_redirectResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseInterface_statusResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseManage.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseWare.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IJsonResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IPlainTextResponse.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpFileResponseContent.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpInvalidReponseContent.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpResponseContent.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionManager.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionWare.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpCachedSession.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpCachedSessionData.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpSessionCreateFilter.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpSessionDumpFilter.cpp
+)
+
+cacheToResources(
+    ${CMAKE_CURRENT_LIST_DIR}/http/webresource.qrc
+)

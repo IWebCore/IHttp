@@ -1,0 +1,13 @@
+{
+    
+    "name":"IHttp",
+    "group":"IWebCore",
+    "version":"1.0.0",
+    "author": "yuekeyuan",
+    
+    "summary":"http mvc server framework",
+    "dependencies": {
+        "ITcp": "~=1.0.0",
+        "ICore": "~=1.0.0"
+    }
+}
