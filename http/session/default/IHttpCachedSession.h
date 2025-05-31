@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "core/util/IHeaderUtil.h"
+#include "core/base/IHandle.h"
 #include <shared_mutex>
 #include "http/session/IHttpSessionInterface.h"
 
@@ -35,7 +36,7 @@ private:
 private:
     mutable std::shared_mutex m_mutex;
     QHash<QString, IHttpCachedSessionData*> m_store;
-    std::ptrdiff_t m_timerId{};
+    IHandle m_timerId{};
 };
 
 $PackageWebCoreEnd
