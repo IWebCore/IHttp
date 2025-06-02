@@ -11,11 +11,6 @@ public:                                                                         
     klassName& operator=(klassName &rhs){ IHttpResponseInterface::operator =(rhs);   return *this; }                                    \
     klassName& operator=(klassName &&rhs){  IHttpResponseInterface::operator =(std::move(rhs));  return *this; }                        \
 private:                                                                                                                            \
-    virtual IHttpResponseWare* prefixCreate(const std::string &data) final {                                                            \
-        if /*constexpr*/ (& klassName :: prefixMatcher != &IHttpResponseWare::prefixMatcher){                                               \
-            return new klassName(IStringUtil::mid(data, prefixMatcher().length()));                                                 \
-        }                                                                                                                           \
-        return nullptr;                                                                                                             \
+    virtual IHttpResponseWare* prefixCreate(const std::string &data) final {                                                        \
+        return new klassName(IStringUtil::mid(data, prefixMatcher().length()));                                                     \
     }
-
-

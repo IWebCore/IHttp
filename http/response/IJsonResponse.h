@@ -39,7 +39,7 @@ public:
     virtual std::string prefixMatcher() final;
 };
 
-IJsonResponse operator"" _json(const char* str, size_t size);
+IJsonResponse operator"" _ijson(const char* str, std::size_t size);
 
 template<typename T>
 IJsonResponse::IJsonResponse(const T& value)

@@ -68,7 +68,7 @@ std::string IJsonResponse::prefixMatcher()
     return "$json:";
 }
 
-IJsonResponse operator"" _json(const char *str, size_t size)
+IJsonResponse operator"" _ijson(const char *str, std::size_t size)
 {
     auto data = std::string(str, static_cast<int>(size));
     return IJsonResponse(std::move(data));

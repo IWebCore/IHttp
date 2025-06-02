@@ -26,6 +26,13 @@ public:
     IHttpResponseInterface& operator=(IHttpResponseInterface&&);
 };
 
+$PackageWebCoreEnd
+
+#include "http/response/IHttpResponseInterface_statusResponse.h"
+#include "http/response/IHttpResponseInterface_redirectResponse.h"
+
+$PackageWebCoreBegin
+
 template<typename T, bool enabled>
 IHttpResponseInterface<T, enabled>::IHttpResponseInterface(IRedirectResponse &&response)
 {
@@ -73,5 +80,3 @@ IHttpResponseInterface<T, enabled> &IHttpResponseInterface<T, enabled>::operator
 
 $PackageWebCoreEnd
 
-#include "http/response/IHttpResponseInterface_statusResponse.h"
-#include "http/response/IHttpResponseInterface_redirectResponse.h"
