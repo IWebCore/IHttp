@@ -63,6 +63,7 @@ void IHttpPathValidatorsTask::$task()
     }
 }
 
+// TODO:  here should be judged signed, unsigned and floationg point latter
 template<typename T>
 bool isFitIntegerValue(IStringView str)
 {
@@ -70,11 +71,22 @@ bool isFitIntegerValue(IStringView str)
         return false;
     }
     char* end = nullptr;
-    long long value = std::strtoll(str.data(), &end, 10);
-    if (*end != '\0') {
-        return false;
+    if constexpr (std::is_signed_v<T>){
+        long long value = std::strtoll(str.data(), &end, 10);
+        if (*end != '\0') {
+            return false;
+        }
+        return value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max();
+    } else {
+        unsigned long long value = std::strtoull(str.data(), &end, 10);
+        if (*end != '\0') {
+            return false;
+        }
+        return value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max();
     }
-    return value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max();
+
+    qFatal("this will not be executed");
+    return true;
 }
 
 bool detail::isShortValue(IStringView value)

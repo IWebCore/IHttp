@@ -74,7 +74,6 @@ void IHttpCachedSession::invalidate(const QString &id)
 
 void IHttpCachedSession::startTimer()
 {
-    static int id{};
     static $Int time{"/http/session/clearTime", 35 * 60};
     m_timerId = IAsioContext::startTimer(std::chrono::seconds(*time), [&](){
         reduceSession();

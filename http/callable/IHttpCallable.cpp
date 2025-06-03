@@ -9,7 +9,7 @@ $PackageWebCoreBegin
 class IHttpCallableDetail : public IHttpCallable
 {
 public:
-    IHttpCallableDetail(void *m_handler, const QString &m_className, const QMetaMethod &m_metaMethod);
+    IHttpCallableDetail(void *handler, const QString &className, const QMetaMethod &metaMethod);
 
 public:
     void createReturnNode();
@@ -20,9 +20,13 @@ private:
     void checkMethodOfReturnVoid();
 };
 
-IHttpCallableDetail::IHttpCallableDetail(void *handler_, const QString &className_, const QMetaMethod &method_)
-    : IHttpCallable{handler_, className_, method_}
+IHttpCallableDetail::IHttpCallableDetail(void *handler, const QString &className, const QMetaMethod &method)
+    : IHttpCallable()
 {
+    m_handler = handler;
+    m_className = className;
+    m_metaMethod = method;
+
     createReturnNode();
     createArgumentNodes();
     createSignature();

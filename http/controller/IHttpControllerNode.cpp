@@ -88,6 +88,8 @@ IHttpControllerAction* IHttpControllerNode::getAction(IHttpMethod method) const
         return patchMethodAction;
     case IHttpMethod::HEAD:
         return getMethodAction;
+    default:
+        break; // do nothing here;
     }
     return nullptr;
 }

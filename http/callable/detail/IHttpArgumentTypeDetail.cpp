@@ -46,21 +46,21 @@ namespace detail
         return types.contains(typeId) || typeNames.contains(typeName);
     }
 
-    static void* convertPtr(const QList<IString>& data, QMetaType::Type typeId, const IString& typeName)
-    {
-        if(typeId == QMetaType::QStringList){
-            auto ret = new QStringList;
-            for(const auto& val : data){
-                ret->append(val.toQString());
-            }
-            return ret;
-        }
-        if(typeName == "QList<IString>") {
-            return new QList<IString>(data);
-        }
-        IHttpAbort::abortTypeConvertionFailed("can not convert from QList<IString> to " + typeName, $ISourceLocation);
-        return nullptr;
-    }
+//    static void* convertPtr(const QList<IString>& data, QMetaType::Type typeId, const IString& typeName)
+//    {
+//        if(typeId == QMetaType::QStringList){
+//            auto ret = new QStringList;
+//            for(const auto& val : data){
+//                ret->append(val.toQString());
+//            }
+//            return ret;
+//        }
+//        if(typeName == "QList<IString>") {
+//            return new QList<IString>(data);
+//        }
+//        IHttpAbort::abortTypeConvertionFailed("can not convert from QList<IString> to " + typeName.toQString(), $ISourceLocation);
+//        return nullptr;
+//    }
 
     static void* convertPtr(const IStringViewList& data, QMetaType::Type typeId, const IString& typeName)
     {
@@ -78,7 +78,7 @@ namespace detail
             }
             return ret;
         }
-        IHttpAbort::abortTypeConvertionFailed("can not convert from IStringViewList to " + typeName, $ISourceLocation);
+        IHttpAbort::abortTypeConvertionFailed("can not convert from IStringViewList to " + typeName.toQString(), $ISourceLocation);
         return nullptr;
     }
 
@@ -151,7 +151,7 @@ namespace detail
             }
             return const_cast<IHttpCookiePart*>(&IHttpCookiePart::Empty);
         }
-        IHttpAbort::abortTypeConvertionFailed("can not convert from IString to " + typeName, $ISourceLocation);
+        IHttpAbort::abortTypeConvertionFailed("can not convert from IString to " + typeName.toQString(), $ISourceLocation);
         return nullptr;
     }
 
@@ -211,7 +211,7 @@ namespace detail
         }else if(typeName == "QList<IString>"){
             return delete static_cast<QList<IString>*>(ptr);
         }
-        IHttpAbort::abortArgumentTypeError("error when delete refactored value. type:" + typeName);
+        IHttpAbort::abortArgumentTypeError("error when delete refactored value. type:" + typeName.toQString());
     }
 }
 
@@ -246,7 +246,7 @@ void IHttpArgumentTypeDetail::resolveName()
     if(m_nameRaw.isEmpty()){
         IHttpAbort::abortArgumentTypeError("Http Method declaration should not only contain type, but also name. name can not be empty!");
     }
-
+    qDebug() << m_nameRaw.toQString();
     IStringViewList args = m_nameRaw.split("_$");
     m_name = args.first();
     args.pop_front();
@@ -480,7 +480,7 @@ void IHttpArgumentTypeDetail::createQueryType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     auto self = *this;
     this->m_createFun = [=](IRequest& req)->void*{
@@ -502,17 +502,23 @@ void IHttpArgumentTypeDetail::createHeaderType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     auto self = *this;
     this->m_createFun = [=](IRequest& request) ->void*{
-        if(request.impl().m_reqRaw.m_headers.contains(self.m_name)){
-            auto ptr = detail::convertPtr(request.impl().m_reqRaw.m_headers.value(self.m_name), self.m_typeId, self.m_typeName);
-            if(!ptr){
-                request.setInvalid(IHttpBadRequestInvalid("header field value not proper"));
+
+        const auto& keys = request.impl().m_reqRaw.m_headers.keys();
+        for(const auto& key : keys){
+            if(key.equalIgnoreCase(self.m_name)){
+                auto value = request.impl().m_reqRaw.m_headers.value(key);
+                auto ptr = detail::convertPtr(value, self.m_typeId, self.m_typeName);
+                if(!ptr){
+                    request.setInvalid(IHttpBadRequestInvalid("header field value not proper"));
+                }
+                return ptr;
             }
-            return ptr;
         }
+
         if(self.m_optional){
             return self.m_optionalPtr;
         }
@@ -527,7 +533,7 @@ void IHttpArgumentTypeDetail::createCookieType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     auto self = *this;
     this->m_createFun = [=](IRequest& request) ->void*{
@@ -575,7 +581,7 @@ void IHttpArgumentTypeDetail::createPathType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     if(this->m_optional){
         IHttpAbort::abortArgumentTypeError("Path variable can`t be optional", $ISourceLocation);
@@ -600,7 +606,7 @@ void IHttpArgumentTypeDetail::createBodyType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     static const std::vector<IString> types = {"IString", "IStringView", "std::string", "QString", "QByteArray"};
     if(std::find(types.begin(), types.end(), m_typeName) == types.end()){
@@ -629,7 +635,7 @@ void IHttpArgumentTypeDetail::createFormType()
         return;
     }
     if(!detail::isTypeConvertable(m_typeId, m_typeName)){
-        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName, $ISourceLocation);
+        IHttpAbort::abortArgumentTypeError("type can not be processed. type:" + m_typeName.toQString(), $ISourceLocation);
     }
     auto self = *this;
     this->m_createFun = [=](IRequest& req)->void*{

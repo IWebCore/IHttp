@@ -116,7 +116,7 @@ namespace ISpawnUtil
                 path.m_actionNameMap[path.m_fragments[i].m_name] = i;
             }
         }
-        return std::move(path);
+        return path;
     }
 
     template<>
