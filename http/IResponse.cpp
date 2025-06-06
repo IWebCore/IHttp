@@ -161,15 +161,15 @@ IResponse &IResponse::setContent<IStringView>(IStringView view)
     return setContent(IString(view));
 }
 
-IResponse &IResponse::setContent(const IHttpResponseWare& ware)
+IResponse &IResponse::setResponseWare(const IHttpResponseWare &ware)
 {
     m_impl.setResponseWare(ware);
     return *this;
 }
 
-IResponse &IResponse::setContent(const IHttpInvalidWare& unit)
+IResponse &IResponse::setInvalidWare(const IHttpInvalidWare &ware)
 {
-    setInvalid(unit);
+    setInvalid(ware);
     return *this;
 }
 

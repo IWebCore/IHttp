@@ -9,6 +9,7 @@ class IHttpFileResponseContent;
 class IFileResponse : public IHttpResponseInterface<IFileResponse>
 {
     $AsResponse(IFileResponse)
+
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
 //    using IResponseInterface::operator [];
@@ -29,9 +30,6 @@ public:
 
 public:
     virtual std::string prefixMatcher() final;
-
-private:
-    IHttpFileResponseContent* m_fileResponseContent{};
 };
 
 IFileResponse operator"" _file(const char* str, size_t size);

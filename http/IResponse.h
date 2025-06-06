@@ -46,8 +46,10 @@ public:
 
     template<typename T>
     IResponse& setContent(T strData);
-    IResponse& setContent(const IHttpResponseWare& ware);    // 对于这个，可以多思考一下，使用引用怎么样
-    IResponse& setContent(const IHttpInvalidWare& ware);
+//    IResponse& setContent(const IHttpResponseWare& ware);    // 对于这个，可以多思考一下，使用引用怎么样
+//    IResponse& setContent(const IHttpInvalidWare& ware);
+    IResponse& setResponseWare(const IHttpResponseWare&);
+    IResponse& setInvalidWare(const IHttpInvalidWare& ware);
 
     void setInvalid(const IHttpInvalidWare& ware);
 
@@ -59,6 +61,21 @@ public:
 private:
     IHttpRequestImpl& m_impl;
 };
+
+template<typename T>
+IResponse& IResponse::setContent(T data)
+{
+    using Type = std::remove_cv_t<std::remove_reference_t<T>>;
+
+    if constexpr (std::is_base_of_v<IHttpResponseWare, Type>){
+        return setResponseWare(data);
+    }
+    if constexpr (std::is_base_of_v<IHttpInvalidWare, Type>){
+        return setInvalidWare(data);
+    }
+    qFatal("your content do not meet the need");
+    return *this;
+}
 
 $PackageWebCoreEnd
 

@@ -10,10 +10,14 @@ class IHttpResponseContent
     friend class IHttpResponseRaw;
 public:
     IHttpResponseContent() = default;
-    virtual ~IHttpResponseContent();
-
     IHttpResponseContent(IString&&);
     IHttpResponseContent(const IString&);
+    IHttpResponseContent(IHttpResponseContent&&) = default;
+    IHttpResponseContent(const IHttpResponseContent&);
+    IHttpResponseContent& operator=(IHttpResponseContent&&) = default;
+    IHttpResponseContent& operator=(const IHttpResponseContent&);
+
+    virtual ~IHttpResponseContent();
 
 public:
     void setAttribute(IString, IString);

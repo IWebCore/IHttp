@@ -8,7 +8,7 @@
 public:                                                                                                                             \
     klassName(const klassName &rhs) : IHttpResponseInterface(rhs){}                                                                     \
     klassName(klassName&& rhs) : IHttpResponseInterface(std::move(rhs)){}                                                               \
-    klassName& operator=(klassName &rhs){ IHttpResponseInterface::operator =(rhs);   return *this; }                                    \
+    klassName& operator=(const klassName &rhs){ IHttpResponseInterface::operator =(rhs);   return *this; }                                    \
     klassName& operator=(klassName &&rhs){  IHttpResponseInterface::operator =(std::move(rhs));  return *this; }                        \
 private:                                                                                                                            \
     virtual IHttpResponseWare* prefixCreate(const std::string &data) final {                                                        \

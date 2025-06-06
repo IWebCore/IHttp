@@ -1,6 +1,6 @@
-cacheToIncludes(${CMAKE_CURRENT_LIST_DIR})
+loadToIncludes(${CMAKE_CURRENT_LIST_DIR})
 
-cacheToSources(
+loadToSources(
     ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookieJar.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookiePart.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/IHttpHeaderJar.cpp 
@@ -65,6 +65,6 @@ cacheToSources(
     ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpSessionDumpFilter.cpp
 )
 
-cacheToResources(
+loadToResources(
     ${CMAKE_CURRENT_LIST_DIR}/http/webresource.qrc
 )

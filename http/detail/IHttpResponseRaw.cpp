@@ -72,6 +72,37 @@ std::vector<IStringView> generateHeadersContent(IHttpRequestImpl& m_raw, std::si
 
 }
 
+IHttpResponseRaw::IHttpResponseRaw(const IHttpResponseRaw &rhs)
+    : IStringViewStash(rhs)
+{
+    IStringViewStash::operator=(rhs);
+
+    m_isValid = rhs.m_isValid;
+    m_mime = rhs.m_mime;
+    m_status = rhs.m_status;
+    m_cookies = rhs.m_cookies;
+    m_result = rhs.m_result;
+    for(auto content : m_contents){
+        m_contents.push_back(new IHttpResponseContent(*content));
+    }
+}
+
+IHttpResponseRaw &IHttpResponseRaw::operator=(const IHttpResponseRaw &rhs)
+{
+    IStringViewStash::operator=(rhs);
+
+    m_isValid = rhs.m_isValid;
+    m_mime = rhs.m_mime;
+    m_status = rhs.m_status;
+    m_cookies = rhs.m_cookies;
+    m_result = rhs.m_result;
+    for(auto content : m_contents){
+        m_contents.push_back(new IHttpResponseContent(*content));
+    }
+
+    return *this;
+}
+
 IHttpResponseRaw::~IHttpResponseRaw()
 {
     while(!m_contents.empty()){

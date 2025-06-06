@@ -18,6 +18,10 @@ class IHttpResponseRaw : public IStringViewStash
     friend class IHttpRequestImpl;
 public:
     IHttpResponseRaw() = default;
+    IHttpResponseRaw(IHttpResponseRaw&& rhs) = default;
+    IHttpResponseRaw(const IHttpResponseRaw& rhs);
+    IHttpResponseRaw& operator=(IHttpResponseRaw&&rhs) = default;
+    IHttpResponseRaw& operator=(const IHttpResponseRaw&rhs);
     ~IHttpResponseRaw();
 
 public:

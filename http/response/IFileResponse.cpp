@@ -20,15 +20,13 @@ IFileResponse::IFileResponse(const QString &data)
 
 IFileResponse::IFileResponse(IString &&path)
 {
-    m_fileResponseContent = new IHttpFileResponseContent(std::move(path));
-    m_raw->setContent(m_fileResponseContent);
+    m_raw->setContent(new IHttpFileResponseContent(std::move(path)));
     m_raw->setMime(IHttpMime::APPLICATION_OCTET_STREAM);
 }
 
 IFileResponse::IFileResponse(const IString &path)
 {
-    m_fileResponseContent = new IHttpFileResponseContent(path);
-    m_raw->setContent(m_fileResponseContent);
+    m_raw->setContent(new IHttpFileResponseContent(path));
     m_raw->setMime(IHttpMime::APPLICATION_OCTET_STREAM);
 }
 
@@ -44,7 +42,12 @@ IFileResponse::IFileResponse(std::string &&path)
 
 void IFileResponse::enableContentDisposition()
 {
-    m_fileResponseContent->setAttribute(&IHttpFileResponseContent::ContentDispoistion, IHttp::TRUE_STR);
+    if(m_raw->m_contents.size() != 0){
+        auto ptr = dynamic_cast<IHttpFileResponseContent*>(m_raw->m_contents.back());
+        if(ptr){
+            ptr->setAttribute(&IHttpFileResponseContent::ContentDispoistion, IHttp::TRUE_STR);
+        }
+    }
 }
 
 std::string IFileResponse::prefixMatcher()
