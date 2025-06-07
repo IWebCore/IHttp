@@ -9,7 +9,6 @@ class IHttpFileResponseContent;
 class IFileResponse : public IHttpResponseInterface<IFileResponse>
 {
     $AsResponse(IFileResponse)
-
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
 //    using IResponseInterface::operator [];

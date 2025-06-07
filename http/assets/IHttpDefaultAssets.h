@@ -11,6 +11,7 @@ public:
 
 public:
     virtual bool isValid() const final;
+    virtual void travelPrint() const final;
     virtual IHttpActionWare* getAction(IRequest &) const final;
 };
 

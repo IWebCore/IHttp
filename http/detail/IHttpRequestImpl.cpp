@@ -39,6 +39,9 @@ IHttpRequestImpl::~IHttpRequestImpl()
     if(m_chunkFlow){
         delete m_chunkFlow;
     }
+    if(m_action && m_action->m_isDeleteble){
+        delete m_action;
+    }
 }
 
 void IHttpRequestImpl::parseData()

@@ -6,28 +6,39 @@ $PackageWebCoreBegin
 
 IHttpDefaultAssets::IHttpDefaultAssets()
 {
-    qDebug() << "run here";
 }
 
 bool IHttpDefaultAssets::isValid() const
 {
+    static $Bool enabled{"/http/assets/enabled", true};
+    if(!enabled.value()){
+        return false;
+    }
+
+    static $QString path{"/http/assets/path", ""};
+    if(path.value().isEmpty()){
+        return false;
+    }
+
     return true;
-//    static $Bool enabled{"/http/defaultAssets/enabled", true};
-//    static $QString path{"/http/defaultAssets/path", ""};
-//    if(!enabled.value()){
-//        return false;
-//    }
-
-//    if(path.value().isEmpty()){
-//        return false;
-//    }
-
-//    return true;
 }
 
-IHttpActionWare *IHttpDefaultAssets::getAction(IRequest &) const
+void IHttpDefaultAssets::travelPrint() const
 {
-    return new IHttpAssetsAction("D:/yuekeyuan.pdf");
+    static $QString path{"/http/assets/path"};
+    qDebug() << "assets mapping file at:" << *path << endl;
+}
+
+IHttpActionWare *IHttpDefaultAssets::getAction(IRequest &request) const
+{
+    static $QString s_path{"//http/assets/path"};
+
+    auto path = request.url();
+    auto newPath = s_path.value() + path.toQString();
+    if(QFileInfo(newPath).exists()){
+        return new IHttpAssetsAction(newPath);
+    }
+    return nullptr;
 }
 
 $PackageWebCoreEnd

@@ -27,6 +27,7 @@ HEADERS += \
     $$PWD/http/action/IHttpOptionsMethodAction.h \
     $$PWD/http/assets/IHttpAssetsAction.h \
     $$PWD/http/assets/IHttpAssetsActionMapping.h \
+    $$PWD/http/assets/IHttpAssetsAnnomacro.h \
     $$PWD/http/assets/IHttpAssetsInterface.h \
     $$PWD/http/assets/IHttpAssetsWare.h \
     $$PWD/http/assets/IHttpDefaultAssets.h \
@@ -125,7 +126,6 @@ SOURCES += \
     $$PWD/http/action/IHttpOptionsMethodAction.cpp \
     $$PWD/http/assets/IHttpAssetsAction.cpp \
     $$PWD/http/assets/IHttpAssetsActionMapping.cpp \
-    $$PWD/http/assets/IHttpAssetsWare.cpp \
     $$PWD/http/assets/IHttpDefaultAssets.cpp \
     $$PWD/http/biscuits/IHttpHeader.cpp \
     $$PWD/http/biscuits/IHttpMethod.cpp \

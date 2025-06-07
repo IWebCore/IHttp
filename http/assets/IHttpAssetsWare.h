@@ -9,9 +9,10 @@ class IRequest;
 class IHttpAssetsWare
 {
 public:
-    IHttpAssetsWare();
+    IHttpAssetsWare() = default;
 
 public:
+    virtual void travelPrint() const = 0;
     virtual IHttpActionWare* getAction(IRequest&) const = 0;
 };
 

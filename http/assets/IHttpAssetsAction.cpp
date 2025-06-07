@@ -7,6 +7,7 @@
 IHttpAssetsAction::IHttpAssetsAction(const QString &path)
     : m_path (path)
 {
+    m_isDeleteble = true;
 }
 
 void IHttpAssetsAction::invoke(IRequest &request) const

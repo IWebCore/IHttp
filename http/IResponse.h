@@ -62,6 +62,7 @@ private:
     IHttpRequestImpl& m_impl;
 };
 
+// not recommend!!! this will produce copied data
 template<typename T>
 IResponse& IResponse::setContent(T data)
 {

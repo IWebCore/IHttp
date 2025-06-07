@@ -1,4 +1,5 @@
 ﻿#include "IHttpAssetsActionMapping.h"
+#include "IHttpAssetsWare.h"
 
 IHttpAssetsActionMapping::IHttpAssetsActionMapping()
 {
@@ -11,7 +12,9 @@ void IHttpAssetsActionMapping::registAssetsWare(IHttpAssetsWare *ware)
 
 void IHttpAssetsActionMapping::travelPrint() const
 {
-
+    for(auto ware : m_assetsWares){
+        ware->travelPrint();
+    }
 }
 
 IHttpActionWare *IHttpAssetsActionMapping::getAction(IRequest &request) const

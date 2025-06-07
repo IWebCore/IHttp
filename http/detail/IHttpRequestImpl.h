@@ -30,6 +30,7 @@ struct IHttpChunkedFlow;
 class IHttpRequestImpl : public IStringViewStash
 {
     friend class IRequest;
+    Q_DISABLE_COPY_MOVE(IHttpRequestImpl)
 private:
     enum class State{
         FirstLineState, HeaderState, LoadBodyState, BodyState, EndState

@@ -34,10 +34,6 @@ IHttpResponseContent &IHttpResponseContent::operator=(const IHttpResponseContent
     return *this;
 }
 
-IHttpResponseContent::~IHttpResponseContent()
-{
-}
-
 void IHttpResponseContent::setAttribute(IString key, IString value)
 {
     if(!m_attribute){

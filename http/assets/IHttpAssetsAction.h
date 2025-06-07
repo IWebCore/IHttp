@@ -4,6 +4,7 @@
 
 $PackageWebCoreBegin
 
+// heap only
 class IHttpAssetsAction : public IHttpActionInterface<IHttpAssetsAction>
 {
 public:

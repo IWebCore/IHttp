@@ -2,7 +2,6 @@
 
 #include "core/util/IHeaderUtil.h"
 #include "http/action/IHttpActionMappingInterface.h"
-#include "http/assets/IHttpAssetsWare.h"
 
 $PackageWebCoreBegin
 
