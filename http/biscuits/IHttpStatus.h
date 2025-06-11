@@ -1,9 +1,10 @@
 ﻿#pragma once
+
 #include "core/util/IHeaderUtil.h"
 
 $PackageWebCoreBegin
 
-enum class IHttpStatus : int
+enum IHttpStatus
 {
     // 1XX
     CONTINUE_100                            = 100,

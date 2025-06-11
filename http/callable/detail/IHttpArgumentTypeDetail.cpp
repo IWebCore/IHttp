@@ -246,7 +246,6 @@ void IHttpArgumentTypeDetail::resolveName()
     if(m_nameRaw.isEmpty()){
         IHttpAbort::abortArgumentTypeError("Http Method declaration should not only contain type, but also name. name can not be empty!");
     }
-    qDebug() << m_nameRaw.toQString();
     IStringViewList args = m_nameRaw.split("_$");
     m_name = args.first();
     args.pop_front();

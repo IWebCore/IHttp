@@ -4,6 +4,7 @@
 #include "http/detail/IHttpResponseRaw.h"
 #include "http/detail/IHttpRequestRaw.h"
 #include "tcp/ITcpConnection.h"
+#include <QMetaObject>
 
 $PackageWebCoreBegin
 
@@ -12,8 +13,8 @@ void IHttpControllerAction::invoke(IRequest &request) const
     auto params = createParams(request);
     if(request.isValid()){
         auto index = m_callable.m_metaMethod.methodIndex();
-        auto enclosingObject = m_callable.m_metaMethod.enclosingMetaObject();
-        enclosingObject->static_metacall(QMetaObject::InvokeMetaMethod, index, params.data());
+        auto obj = static_cast<QObject*>(m_callable.m_handler);
+        m_callable.m_metaCall(obj, QMetaObject::InvokeMetaMethod, index, params.data());
         if(request.isValid()){
             m_callable.m_returnNode.m_resolveFunction(request.impl(), params[0]);
         }

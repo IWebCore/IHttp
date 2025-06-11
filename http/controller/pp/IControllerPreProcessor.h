@@ -2,12 +2,16 @@
 
 #include "core/util/IPreProcessorUtil.h"
 
-#define $AsController(path) \
-    Q_CLASSINFO(PP_STRING(IHttpControllerMapping$), #path) \
+#define $AsController(path)                                                                       \
+    Q_CLASSINFO(PP_STRING(IHttpControllerMapping$), #path)                                        \
+public:                                                                                           \
+    virtual IGadgetUnit::StaticMetacallFunction staticMetaCallFunction() const final{             \
+        return qt_static_metacall;                                                                \
+    }                                                                                             \
 private:
 
 #define PP_CONTROLLER_PROP(funName, type, index)    \
-    PP_STRING(IHttpControllerCallableMapping$$$ ## funName ## $$$ ## type ## $$$ ## index)
+    PP_STRING(IHttpControllerCallableMapping$$$ ## funName ## $$$ ## type ## $$$ ## index)    
 
 #ifdef Q_MOC_RUN
     #define $Path(name)       name##_$PATH
@@ -21,8 +25,8 @@ private:
     #define $Optional(name)   name##_$OPTIONAL
 
 #else
-    #define $Query(name)      name
     #define $Path(name)       name
+    #define $Query(name)      name
     #define $Header(name)     name
     #define $Cookie(name)     name
     #define $Session(name)    name

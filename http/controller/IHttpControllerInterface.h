@@ -4,6 +4,7 @@
 #include "core/util/IMetaUtil.h"
 #include "core/task/unit/ITaskWareUnit.h"
 #include "core/unit/ISoloUnit.h"
+#include "core/unit/IGadgetUnit.h"
 #include "core/util/ISpawnUtil.h"
 #include "http/IHttpTaskCatagory.h"
 
@@ -20,7 +21,7 @@
 $PackageWebCoreBegin
 
 template<typename T, bool enabled = true>
-class IHttpControllerInterface : public ITaskWareUnit<T, IHttpTaskCatagory, enabled>, public ISoloUnit<T>
+class IHttpControllerInterface : public IGadgetUnit, public ITaskWareUnit<T, IHttpTaskCatagory, enabled>, public ISoloUnit<T>
 {
 public:
     virtual void $task() final;
@@ -29,7 +30,7 @@ public:
 template<typename T, bool enabled>
 void IHttpControllerInterface<T, enabled>::$task()
 {
-    if constexpr (enabled){
+    if /*constexpr*/ (enabled){
         auto className = IMetaUtil::getMetaClassName (T::staticMetaObject);
         auto classInfo = IMetaUtil::getMetaClassInfoMap(T::staticMetaObject);
         auto classMethods = IMetaUtil::getMetaMethods(T::staticMetaObject);

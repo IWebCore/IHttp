@@ -263,7 +263,7 @@ void IHttpRequestImpl::parseFirstLine(IStringView line)
 
 void IHttpRequestImpl::resolveFirstLine()
 {
-    auto index = m_reqRaw.m_rawUrl.find_first_of('?');
+    auto index = m_reqRaw.m_rawUrl.find('?');
     if (index == std::string_view::npos) {
         m_reqRaw.m_rawPath = m_reqRaw.m_rawUrl;
         m_reqRaw.m_url = stash(QByteArray::fromPercentEncoding(QByteArray(m_reqRaw.m_rawUrl.data(), static_cast<int>(m_reqRaw.m_rawUrl.length()))));
@@ -271,7 +271,7 @@ void IHttpRequestImpl::resolveFirstLine()
     }
 
     m_reqRaw.m_rawPath = m_reqRaw.m_rawUrl.substr(0, index);
-    m_reqRaw.m_url = stash(QByteArray::fromPercentEncoding(QByteArray(m_reqRaw.m_rawUrl.data(), static_cast<int>(m_reqRaw.m_rawUrl.length()))));
+    m_reqRaw.m_url = stash(QByteArray::fromPercentEncoding(QByteArray(m_reqRaw.m_rawPath.data(), static_cast<int>(m_reqRaw.m_rawPath.length()))));
 
     m_reqRaw.m_rawPathArgs = m_reqRaw.m_rawUrl.substr(index + 1);
     parseUrlEncodedData(m_reqRaw.m_rawPathArgs, false);
@@ -385,7 +385,7 @@ void IHttpRequestImpl::parseUrlEncodedData(IStringView view, bool isBody)
             m_reqRaw.m_forms[key] = value;
         }
         else {
-            m_reqRaw.m_paths[key] = value;
+            m_reqRaw.m_queries[key] = value;
         }
     }
 }

@@ -26,6 +26,7 @@ IHttpCallableDetail::IHttpCallableDetail(void *handler, const QString &className
     m_handler = handler;
     m_className = className;
     m_metaMethod = method;
+    m_metaCall = static_cast<IGadgetUnit*>(handler)->staticMetaCallFunction();
 
     createReturnNode();
     createArgumentNodes();
