@@ -4,6 +4,7 @@
 #include "http/detail/IHttpResponseRaw.h"
 #include "http/detail/IHttpRequestRaw.h"
 #include "tcp/ITcpConnection.h"
+#include "http/invalid/IHttpInternalErrorInvalid.h"
 #include <QMetaObject>
 
 $PackageWebCoreBegin
@@ -31,6 +32,10 @@ IHttpControllerAction::ParamType IHttpControllerAction::createParams(IRequest& r
     int len = m_callable.m_argumentNodes.length();
     for(int i=0; i<len; i++){
         params[i+1] = m_callable.m_argumentNodes[i].m_createFun(request);
+        if(!params[i+1] && request.isValid()){
+            qFatal("this should not exist, please report to me");
+            request.setInvalid(IHttpInternalErrorInvalid());
+        }
         if(!request.isValid()){
             break;
         }

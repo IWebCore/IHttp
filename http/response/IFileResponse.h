@@ -11,7 +11,10 @@ class IFileResponse : public IHttpResponseInterface<IFileResponse>
     $AsResponse(IFileResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+
+private:
+    using IHttpResponseInterface::setContent;
 
 public:
     IFileResponse() = default;
@@ -23,6 +26,8 @@ public:
 
     IFileResponse(const std::string& path);
     IFileResponse(std::string&& path);
+
+    void setContent(const IHttpInvalidWare& ware);
 
 public:
     void enableContentDisposition();

@@ -48,6 +48,11 @@ void IHttpSession::setValue(const QString& key, QVariant value)
     m_sessionWare.setValue(m_sessionId, key, value);
 }
 
+bool IHttpSession::contains(const QString &key) const
+{
+    return m_sessionWare.contains(m_sessionId, key);
+}
+
 IHttpCookiePart IHttpSession::toCookie() const
 {
     return m_sessionWare.toCookie(m_sessionId);

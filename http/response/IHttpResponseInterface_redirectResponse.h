@@ -11,7 +11,10 @@ class IRedirectResponse : public IHttpResponseInterface<IRedirectResponse>
     $AsResponse(IRedirectResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+
+private:
+    using IHttpResponseInterface::setContent;
 
 public:
     IRedirectResponse();

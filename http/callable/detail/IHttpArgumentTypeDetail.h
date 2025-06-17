@@ -7,6 +7,7 @@ $PackageWebCoreBegin
 
 struct IHttpArgumentTypeDetail : public IHttpArgumentType
 {
+    using CreateFun = void (IHttpArgumentTypeDetail::*)();
 public:
     IHttpArgumentTypeDetail(int typeId, QByteArray typeName, QByteArray nameRaw);   // TODO: better to add signature,but skip here now.
 
@@ -14,7 +15,7 @@ private:
     void resolveName();
 
 private:// IRequest, IResponse, Jars
-    void createBasicTypes();
+    void createEmbendTypes();
     void createRequestType();
     void createResponseType();
     void createMultiPartJarType();
@@ -37,6 +38,11 @@ private: // $Header, $Cookie, $Path, $Query, $Body, $Form, $Session, $Json
     void createBodyType();
     void createFormType();
     void createJsonType();
+
+private:    // QString, int, and others without decorated
+    void createNormalTypes();
+    void createNormalJsonType();
+    void createNormalMixedType();
 
 private:    // bean, List<Bean>, Vector<Bean> ， Map<Bean> ...
     void createBeanTypes();

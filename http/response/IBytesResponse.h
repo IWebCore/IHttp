@@ -10,7 +10,8 @@ class IBytesResponse : public IHttpResponseInterface<IBytesResponse>
     $AsResponse(IBytesResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+    using IHttpResponseInterface::setContent;
 
 public:
     IBytesResponse();

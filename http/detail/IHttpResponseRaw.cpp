@@ -15,12 +15,12 @@ static const IString ServerHeader = "Server: IWebCore\r\n";
 
 namespace detail
 {
-std::vector<IStringView> generateFirstLine(IHttpRequestImpl& impl)
+IStringViewList generateFirstLine(IHttpRequestImpl& impl)
 {
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     ret.push_back(IHttpVersionUtil::toString(impl.m_reqRaw.m_httpVersion).m_view);
     ret.push_back(IHttp::SPACE);
-    ret.push_back(IHttpStatusUtil::toStringNumber(impl.m_respRaw.m_status).m_view);
+    ret.push_back(impl.stash(std::to_string(static_cast<int>(impl.m_respRaw.m_status))));
     ret.push_back(IHttp::SPACE);
     ret.push_back(IHttpStatusUtil::toStringDescription(impl.m_respRaw.m_status).m_view);
     ret.push_back(IHttp::NEW_LINE);
@@ -28,9 +28,9 @@ std::vector<IStringView> generateFirstLine(IHttpRequestImpl& impl)
     return ret;
 }
 
-std::vector<IStringView> generateCookieHeaders(IHttpRequestImpl& impl)
+IStringViewList generateCookieHeaders(IHttpRequestImpl& impl)
 {
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     for(const auto& cookie : impl.m_respRaw.m_cookies){
         auto vals = cookie.toHeaderString();
         for(auto val : vals){
@@ -41,7 +41,7 @@ std::vector<IStringView> generateCookieHeaders(IHttpRequestImpl& impl)
     return ret;
 }
 
-std::vector<IStringView> generateHeadersContent(IHttpRequestImpl& m_raw, std::size_t contentSize)
+IStringViewList generateHeadersContent(IHttpRequestImpl& m_raw, std::size_t contentSize)
 {
     auto& headers = m_raw.m_respRaw.m_headers;
 
@@ -57,7 +57,7 @@ std::vector<IStringView> generateHeadersContent(IHttpRequestImpl& m_raw, std::si
         headers.insert(IHttpHeader::KeepAlive, "timeout=10, max=50");
     }
 
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     ret.push_back(ServerHeader.m_view);
 
     for(const auto& pair : headers.m_header){
@@ -126,6 +126,11 @@ void IHttpResponseRaw::setContent(const IHttpInvalidWare& ware)
     m_status = ware.status;
     m_mime = IHttpMimeUtil::toString(ware.mime);
     setContent(new IHttpInvalidReponseContent(ware));
+}
+
+void IHttpResponseRaw::setContent(IHttpInvalidWare &&ware)
+{
+    setContent(ware);
 }
 
 void IHttpResponseRaw::setContent(IHttpResponseContent *ware)

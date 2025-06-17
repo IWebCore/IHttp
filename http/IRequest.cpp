@@ -28,6 +28,16 @@ IRequest::~IRequest()
     detail::s_pool.deallocate(m_impl);
 }
 
+IStringView IRequest::operator[](const char *header) const
+{
+    return m_impl->m_headerJar.getRequestHeaderValue(header);
+}
+
+IStringView IRequest::operator[](const std::string &header) const
+{
+    return m_impl->m_headerJar.getRequestHeaderValue(header);
+}
+
 IStringView IRequest::operator[](const IString &header) const
 {
     return m_impl->m_headerJar.getRequestHeaderValue(header);
@@ -165,89 +175,49 @@ void IRequest::startWrite()
 std::vector<asio::const_buffer> IRequest::getOutput()
 {
     return m_impl->m_respRaw.m_result;
-//    return m_impl->m_respRaw.getContent(*(this->m_impl));
 }
 
-template<>
-IStringView IRequest::stash<const char*>(const char *data)
+IStringView IRequest::stash(const char *data) const
 {
     return m_impl->stash(data);
 }
 
-template<>
-IStringView IRequest::stash<std::string>(std::string data)
-{
-    return m_impl->stash(std::move(data));
-}
-
-template<>
-IStringView IRequest::stash<std::string&&>(std::string&& data)
-{
-    return m_impl->stash(std::move(data));
-}
-
-template<>
-IStringView IRequest::stash<const std::string&>(const std::string& data)
+IStringView IRequest::stash(const QString &data) const
 {
     return m_impl->stash(data);
 }
 
-template<>
-IStringView IRequest::stash<QByteArray>(QByteArray data)
+IStringView IRequest::stash(std::string &&data) const
 {
     return m_impl->stash(std::move(data));
 }
 
-template<>
-IStringView IRequest::stash<QByteArray&&>(QByteArray&& data)
-{
-    return m_impl->stash(std::move(data));
-}
-
-template<>
-IStringView IRequest::stash<const QByteArray&>(const QByteArray& data)
+IStringView IRequest::stash(const std::string &data) const
 {
     return m_impl->stash(data);
 }
 
-template<>
-IStringView IRequest::stash<QString>(QString data)
+IStringView IRequest::stash(QByteArray &&data) const
 {
     return m_impl->stash(std::move(data));
 }
 
-template<>
-IStringView IRequest::stash<QString&&>(QString&& data)
-{
-    return m_impl->stash(std::move(data));
-}
-
-template<>
-IStringView IRequest::stash<const QString&>(const QString& data)
+IStringView IRequest::stash(const QByteArray &data) const
 {
     return m_impl->stash(data);
 }
 
-template<>
-IStringView IRequest::stash<IString>(IString data)
+IStringView IRequest::stash(IString &&data) const
 {
     return m_impl->stash(std::move(data));
 }
 
-template<>
-IStringView IRequest::stash<IString&&>(IString&& data)
-{
-    return m_impl->stash(std::move(data));
-}
-
-template<>
-IStringView IRequest::stash<const IString&>(const IString& data)
+IStringView IRequest::stash(const IString &data) const
 {
     return m_impl->stash(data);
 }
 
-template<>
-IStringView IRequest::stash<IStringView>(IStringView data)
+IStringView IRequest::stash(IStringView data) const
 {
     return m_impl->stash(data);
 }

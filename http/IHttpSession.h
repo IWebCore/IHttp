@@ -20,6 +20,7 @@ public:
     void remove(const QString& key);
     QVariant getValue(const QString& key, const QVariant& variant = {}) const;
     void setValue(const QString& key, QVariant);
+    bool contains(const QString& key) const;
 
     IHttpCookiePart toCookie() const;
 

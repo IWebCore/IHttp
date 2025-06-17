@@ -12,7 +12,10 @@ class IStatusResponse : public IHttpResponseInterface<IStatusResponse>
     $AsResponse(IStatusResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+
+private:
+    using IHttpResponseInterface::setContent;
 
 public:
     IStatusResponse() = default;

@@ -13,7 +13,7 @@ $PackageWebCoreBegin
 class IHttpRequestImpl;
 class IHttpResponseWare;
 class IHttpInvalidWare;
-class IHttpResponseRaw : public IStringViewStash
+class IHttpResponseRaw : public IStringViewStash        // TODO: check stash whether worked when copy
 {
     friend class IHttpRequestImpl;
 public:
@@ -29,6 +29,7 @@ public:
     void setMime(IHttpMime m_mime);
 
     void setContent(const IHttpInvalidWare& ware);
+    void setContent(IHttpInvalidWare&& ware);
     void setContent(IHttpResponseContent*);
 
     void setCookie(IHttpCookiePart&&);

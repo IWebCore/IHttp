@@ -4,6 +4,7 @@
 #include "http/biscuits/IHttpMime.h"
 #include "http/biscuits/IHttpStatus.h"
 #include "http/detail/IHttpResponseRaw.h"
+#include "http/detail/IHttpResponseHeader.h"
 
 $PackageWebCoreBegin
 
@@ -17,7 +18,7 @@ public:
     IHttpResponseWare(const IHttpResponseWare &);
     IHttpResponseWare& operator =(const IHttpResponseWare&);
     IHttpResponseWare& operator =(IHttpResponseWare&&);
-//    IResponseHeader operator[](const IString& header);
+    IHttpResponseHeader operator[](const IString& header);
 
 public:
     const IString& mime() const;
@@ -34,6 +35,10 @@ public:
     void setCookie(IHttpCookiePart&&);
     void setCookie(const IHttpCookiePart&);
     void setCookie(const IString& key, const IString& value);
+
+    void setContent(IString&& value);
+    void setContent(const IString& value);
+    void setContent(const IHttpInvalidWare&);
 
     virtual std::string prefixMatcher();
     virtual IHttpResponseWare* prefixCreate(const std::string&);

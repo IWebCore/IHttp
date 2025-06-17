@@ -13,6 +13,9 @@ template<typename T, bool enabled=true>
 class IHttpResponseInterface : public IHttpResponseWare, IHttpResponseUnit<T, enabled>
 {
 public:
+    using IHttpResponseWare::operator [];
+
+public:
     IHttpResponseInterface() = default;
     virtual ~IHttpResponseInterface() = default;
 

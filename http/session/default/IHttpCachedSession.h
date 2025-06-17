@@ -23,6 +23,7 @@ public:
     virtual void remove(const QString& id, const QString& key);
     virtual QVariant getValue(const QString& id, const QString& key, const QVariant& defaultValue={}) const;
     virtual void setValue(const QString& id, const QString& key, const QVariant& value) final;
+    virtual bool contains(const QString &id, const QString &key) const final;
 
     virtual void invalidate(const QString& id) final;
 

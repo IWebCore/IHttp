@@ -230,7 +230,7 @@ void IHttpRequestImpl::parseFirstLine(IStringView line)
 
     std::size_t pos{};
     // method
-    auto index = line.find_first_of(' ', pos);
+    auto index = line.find(' ', pos);
     if (index == std::string::npos) {
         return setInvalid(IHttpBadRequestInvalid("can not resolve current method type"));
     }
@@ -243,7 +243,7 @@ void IHttpRequestImpl::parseFirstLine(IStringView line)
     pos = index + 1;
 
     // path
-    index = line.find_first_of(' ', pos);
+    index = line.find(' ', pos);
     if (index == std::string_view::npos) {
         return setInvalid(IHttpBadRequestInvalid("request path is not correct"));
     }

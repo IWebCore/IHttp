@@ -49,7 +49,7 @@ bool IHttpPathFragmentDetail::evaluatePlainText()
 
 bool IHttpPathFragmentDetail::evaluateTypeEmptyNode()
 {
-    QRegularExpression regTypeEmpty("^<(\\w*)>$");
+    QRegularExpression regTypeEmpty("^<>$");
     auto result = regTypeEmpty.match(m_fragment.toQString());
     if(result.hasMatch()){
         this->m_type = IHttpPathFragment::FULL_MATCH;

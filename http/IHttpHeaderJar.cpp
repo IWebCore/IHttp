@@ -7,9 +7,9 @@
 
 $PackageWebCoreBegin
 
-std::vector<IStringView> IHttpHeaderJar::requestHeaderKeys() const
+IStringViewList IHttpHeaderJar::requestHeaderKeys() const
 {
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     const auto& headers = m_impl.m_reqRaw.m_headers;
     for(auto it=headers.begin(); it!= headers.end(); it++){
         ret.push_back(it.key());
@@ -42,7 +42,7 @@ IHttpHeader &IHttpHeaderJar::responseHeaders()
     return m_impl.m_respRaw.m_headers;
 }
 
-std::vector<IStringView> IHttpHeaderJar::responseHeaderKeys() const
+IStringViewList IHttpHeaderJar::responseHeaderKeys() const
 {
     return m_impl.m_respRaw.m_headers.keys();
 }

@@ -56,6 +56,16 @@ IHtmlResponse::IHtmlResponse(const IString &data)
     m_raw->setContent(new IHttpResponseContent(data));
 }
 
+void IHtmlResponse::setContent(IString &&data)
+{
+    m_raw->setContent(new IHttpResponseContent(std::move(data)));
+}
+
+void IHtmlResponse::setContent(const IString &data)
+{
+    m_raw->setContent(new IHttpResponseContent(data));
+}
+
 std::string IHtmlResponse::prefixMatcher()
 {
     return "$html:";

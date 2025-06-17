@@ -64,6 +64,15 @@ void IHttpCachedSession::setValue(const QString &id, const QString &key, const Q
     }
 }
 
+bool IHttpCachedSession::contains(const QString &id, const QString &key) const
+{
+    std::shared_lock<std::shared_mutex> lock(m_mutex);
+    if(m_store.contains(id)){
+        return m_store[id]->contains(key);
+    }
+    return false;
+}
+
 void IHttpCachedSession::invalidate(const QString &id)
 {
     std::shared_lock<std::shared_mutex> lock(m_mutex);

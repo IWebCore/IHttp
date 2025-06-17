@@ -11,7 +11,8 @@ class IPlainTextResponse : public IHttpResponseInterface<IPlainTextResponse>
     $AsResponse(IPlainTextResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+    using IHttpResponseInterface::setContent;
 
 public:
     IPlainTextResponse();

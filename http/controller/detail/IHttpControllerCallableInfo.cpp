@@ -1,5 +1,6 @@
 ﻿#include "IHttpControllerCallableInfo.h"
 #include "core/util/ISpawnUtil.h"
+#include "http/IHttpAbort.h"
 #include "http/biscuits/IHttpMethod.h"
 #include "http/controller/IHttpControllerAbort.h"
 #include "http/controller/IHttpControllerActionMapping.h"
@@ -11,7 +12,7 @@ IHttpCallableMappingInfo::IHttpCallableMappingInfo(const QString &key)
 {
     auto args = key.split("$$$");
     if(args.length() != 4){
-        qFatal("error");
+        qFatal("invalid split");
     }
 
     this->m_index = args.last().toInt();
@@ -97,7 +98,8 @@ IHttpCallable IHttpControllerCallableInfo::getHttpMethodNode(const QString &name
             return ISpawnUtil::construct<IHttpCallable>(handler, className, method);
         }
     }
-    qFatal("this will never be called");
+    QString tip = QString("CLASS: ").append(className).append(" FUNCTION NAME: ").append(name);
+    IHttpAbort::abortMappingAndFunctionMismatch(tip, $ISourceLocation);
     return {};
 }
 

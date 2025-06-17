@@ -38,10 +38,10 @@ IHttpResponseWare &IHttpResponseWare::operator = (IHttpResponseWare && rhs)
     return *this;
 }
 
-//IResponseHeader IResponseWare::operator[](const IString &header)
-//{
-//    return IResponseHeader(*m_raw, header);
-//}
+IHttpResponseHeader IHttpResponseWare::operator[](const IString &header)
+{
+    return IHttpResponseHeader(*m_raw, header);
+}
 
 const IString& IHttpResponseWare::mime() const
 {
@@ -91,6 +91,21 @@ void IHttpResponseWare::setCookie(const IHttpCookiePart & cookie)
 void IHttpResponseWare::setCookie(const IString &key, const IString &value)
 {
     m_raw->setCookie(key, value);
+}
+
+void IHttpResponseWare::setContent(IString &&value)
+{
+    m_raw->setContent(new IHttpResponseContent(std::move(value)));
+}
+
+void IHttpResponseWare::setContent(const IString &value)
+{
+    m_raw->setContent(new IHttpResponseContent(value));
+}
+
+void IHttpResponseWare::setContent(const IHttpInvalidWare &ware)
+{
+    m_raw->setContent(ware);
 }
 
 std::string IHttpResponseWare::prefixMatcher()

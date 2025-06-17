@@ -39,6 +39,12 @@ IJsonResponse::IJsonResponse(std::string&& value)
     m_raw->setContent(new IHttpResponseContent(std::move(value)));
 }
 
+IJsonResponse::IJsonResponse(const std::string &value)
+{
+    m_raw->setMime(IHttpMime::APPLICATION_JSON_UTF8);
+    m_raw->setContent(new IHttpResponseContent(value));
+}
+
 IJsonResponse::IJsonResponse(IString &&value)
 {
     m_raw->setMime(IHttpMime::APPLICATION_JSON_UTF8);
@@ -61,6 +67,11 @@ IJsonResponse::IJsonResponse(const QByteArray & value)
 {
     m_raw->setMime(IHttpMime::APPLICATION_JSON_UTF8);
     m_raw->setContent(new IHttpResponseContent(value));
+}
+
+void IJsonResponse::setContent(const IJson &value)
+{
+    m_raw->setContent(new IHttpResponseContent(value.dump()));
 }
 
 std::string IJsonResponse::prefixMatcher()

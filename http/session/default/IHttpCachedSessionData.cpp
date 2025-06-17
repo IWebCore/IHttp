@@ -39,6 +39,11 @@ void IHttpCachedSessionData::setValue(const QString &name, const QVariant &value
     m_data[name] = value;
 }
 
+bool IHttpCachedSessionData::contains(const QString &name) const
+{
+    return m_data.contains(name);
+}
+
 void IHttpCachedSessionData::updateLastVisitTime()
 {
     m_lastVisitTime = IApplication::time();

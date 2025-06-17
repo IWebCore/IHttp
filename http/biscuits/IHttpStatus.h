@@ -84,7 +84,6 @@ enum IHttpStatus
 };
 
 namespace IHttpStatusUtil {
-    const IString& toStringNumber(IHttpStatus);
     const IString& toStringDescription(IHttpStatus);
 }
 

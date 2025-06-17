@@ -1,6 +1,9 @@
 ﻿#include "IHttpPathValidatorsTask.h"
 #include "http/IHttpManage.h"
 #include "http/path/IHttpPathFragment.h"
+#if __has_include(<charconv>)
+    #include <charconv>
+#endif
 
 $PackageWebCoreBegin
 
@@ -63,32 +66,61 @@ void IHttpPathValidatorsTask::$task()
     }
 }
 
-// TODO:  here should be judged signed, unsigned and floationg point latter
+#if __has_include(<charconv>)
 template<typename T>
 bool isFitIntegerValue(IStringView str)
 {
-    if (str.empty()) {
-        return false;
-    }
-    char* end = nullptr;
-    if constexpr (std::is_signed_v<T>){
-        long long value = std::strtoll(str.data(), &end, 10);
-        if (*end != '\0') {
-            return false;
-        }
-        return value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max();
-    } else {
-        unsigned long long value = std::strtoull(str.data(), &end, 10);
-        if (*end != '\0') {
-            return false;
-        }
-        return value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max();
-    }
+    static_assert(std::is_integral_v<T>, "T must be an integral type");
 
-    qFatal("this will not be executed");
-    return true;
+    size_t start = 0;
+    while (start < str.size() && std::isspace(static_cast<unsigned char>(str[start]))) {
+        ++start;
+    }
+    if (start == str.size()) return false;
+    T value;
+    auto [ptr, ec] = std::from_chars(
+        str.data() + start,
+        str.data() + str.size(),
+        value
+    );
+
+    return (ec == std::errc() && ptr == str.data() + str.size());
+}
+#else
+template<typename T>
+bool isFitIntegerValue(std::string_view str) {
+    static_assert(std::is_integral<T>::value, "T must be an integral type");
+
+    char* endptr;
+    errno = 0;
+    if (std::is_signed<T>::value) {
+        long long val = std::strtoll(str.data(), &endptr, 10);
+        if (endptr != str.data() + str.size()) return false;
+        if (errno == ERANGE) return false;
+        if (val < std::numeric_limits<T>::min() || val > std::numeric_limits<T>::max()) {
+            return false;
+        }
+        std::ostringstream oss;
+        oss << static_cast<T>(val);
+        std::string converted_str = oss.str();
+        return (str == converted_str);
+    }
+    else {
+        if (str[0] == '-') return false;
+        unsigned long long val = std::strtoull(str.data(), &endptr, 10);
+        if (endptr != str.data() + str.size()) return false;
+        if (errno == ERANGE) return false;
+        if (val > static_cast<unsigned long long>(std::numeric_limits<T>::max())) {
+            return false;
+        }
+        std::ostringstream oss;
+        oss << static_cast<T>(val);
+        std::string converted_str = oss.str();
+        return (str == converted_str);
+    }
 }
 
+#endif
 bool detail::isShortValue(IStringView value)
 {
     return isFitIntegerValue<short>(value);
@@ -124,17 +156,9 @@ bool detail::isLongLongValue(IStringView value)
     return isFitIntegerValue<long long>(value);
 }
 
-bool detail::isULongLongValue(IStringView str)
+bool detail::isULongLongValue(IStringView value)
 {
-    if (str.empty()) {
-        return false;
-    }
-    char* end = nullptr;
-    std::strtoull(str.data(), &end, 10);
-    if (*end != '\0') {
-        return false;
-    }
-    return true;
+    return isFitIntegerValue<unsigned long long>(value);
 }
 
 bool detail::isFloatValue(IStringView str)

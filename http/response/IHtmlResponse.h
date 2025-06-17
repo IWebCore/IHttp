@@ -10,7 +10,8 @@ class IHtmlResponse : public IHttpResponseInterface<IHtmlResponse>
     $AsResponse(IHtmlResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
+    using IHttpResponseInterface::setContent;
 
 public:
     IHtmlResponse();
@@ -25,6 +26,9 @@ public:
 
     IHtmlResponse(IString&&);
     IHtmlResponse(const IString&);
+
+    void setContent(IString&&);
+    void setContent(const IString&);
 
 public:
     virtual std::string prefixMatcher() final;

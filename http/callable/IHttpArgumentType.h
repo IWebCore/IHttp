@@ -13,8 +13,8 @@ public:
     };
 
 public:
-    std::function<void*(IRequest&)> m_createFun{};
-    std::function<void(void*)> m_destroyFun{};
+    std::function<void*(IRequest&)> m_createFun{nullptr};
+    std::function<void(void*)> m_destroyFun{nullptr};
 
 public:
     QMetaType::Type m_typeId{QMetaType::UnknownType};

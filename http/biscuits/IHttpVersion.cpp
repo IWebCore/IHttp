@@ -40,4 +40,14 @@ IHttpVersion IHttpVersionUtil::toVersion(const IString& version)
     return IHttpVersion(index);
 }
 
+IHttpVersion IHttpVersionUtil::toVersion(const std::string &version)
+{
+    return toVersion(IString(&version));
+}
+
+IHttpVersion IHttpVersionUtil::toVersion(const char *version)
+{
+    return toVersion(IStringView(version));
+}
+
 $PackageWebCoreEnd

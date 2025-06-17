@@ -82,7 +82,7 @@ void detail::resolveHeaders(IHttpMultiPart* self, IStringView data, IRequest* re
 {
     self->m_headers = detail::concatenateHeaders(data.split(IHttp::NEW_LINE), request);
     for(auto line : self->m_headers){
-        auto index = line.find_first_of(':');
+        auto index = line.find(':');
         if(index == std::string_view::npos){
             request->setInvalid(IHttpBadRequestInvalid("multipart header error without colon"));
             return;

@@ -6,6 +6,7 @@
 #include "http/biscuits/IHttpMime.h"
 #include "http/biscuits/IHttpHeader.h"
 #include "http/invalid/IHttpInvalidWare.h"
+#include "http/detail/IHttpResponseHeader.h"
 
 $PackageWebCoreBegin
 
@@ -33,7 +34,10 @@ public:
     IHttpHeaderJar& headerJar();
 
 public:
-//    IResponseHeader operator[](const IString& header) const;
+    IHttpResponseHeader operator[](const char* header) const;
+    IHttpResponseHeader operator[](const std::string& header) const;
+    IHttpResponseHeader operator[](const QString& header) const;
+    IHttpResponseHeader operator[](const IString& header) const;
     IResponse& setHeader(IStringView key, IStringView value);
 
     IResponse& setStatus(IHttpStatus statusCode);
@@ -44,12 +48,17 @@ public:
 
     IResponse& addCookie(IHttpCookiePart cookiePart);
 
-    template<typename T>
-    IResponse& setContent(T strData);
-//    IResponse& setContent(const IHttpResponseWare& ware);    // 对于这个，可以多思考一下，使用引用怎么样
-//    IResponse& setContent(const IHttpInvalidWare& ware);
-    IResponse& setResponseWare(const IHttpResponseWare&);
-    IResponse& setInvalidWare(const IHttpInvalidWare& ware);
+    IResponse& setContent(const char* data);
+    IResponse& setContent(IString&& data);
+    IResponse& setContent(const IString& data);
+    IResponse& setContent(std::string&& data);
+    IResponse& setContent(const std::string& data);
+    IResponse& setContent(QByteArray&& data);
+    IResponse& setContent(const QByteArray& data);
+    IResponse& setContent(const QString& data);
+    IResponse& setContent(IStringView data);
+    IResponse& setContent(const IHttpResponseWare& ware);    // 对于这个，可以多思考一下，使用引用怎么样
+    IResponse& setContent(const IHttpInvalidWare& ware);
 
     void setInvalid(const IHttpInvalidWare& ware);
 
@@ -61,22 +70,6 @@ public:
 private:
     IHttpRequestImpl& m_impl;
 };
-
-// not recommend!!! this will produce copied data
-template<typename T>
-IResponse& IResponse::setContent(T data)
-{
-    using Type = std::remove_cv_t<std::remove_reference_t<T>>;
-
-    if constexpr (std::is_base_of_v<IHttpResponseWare, Type>){
-        return setResponseWare(data);
-    }
-    if constexpr (std::is_base_of_v<IHttpInvalidWare, Type>){
-        return setInvalidWare(data);
-    }
-    qFatal("your content do not meet the need");
-    return *this;
-}
 
 $PackageWebCoreEnd
 

@@ -81,7 +81,7 @@ IHttpCookiePart &IHttpCookiePart::setSameSite(IHttpCookiePart::SameSiteType same
     return *this;
 }
 
-std::vector<IStringView> IHttpCookiePart::toHeaderString() const
+IStringViewList IHttpCookiePart::toHeaderString() const
 {
     static const IString DomainIString = "; Domain=";
     static const IString PathIString = "; Path=";
@@ -91,7 +91,7 @@ std::vector<IStringView> IHttpCookiePart::toHeaderString() const
     static const IString SecureIString = "; Secure";
     static const IString HttpOnlyIString = "; HttpOnly";
 
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     if(m_key.isEmpty() || m_value.isEmpty()){
         return ret;
     }

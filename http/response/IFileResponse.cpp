@@ -40,6 +40,11 @@ IFileResponse::IFileResponse(std::string &&path)
 {
 }
 
+void IFileResponse::setContent(const IHttpInvalidWare &ware)
+{
+    IHttpResponseInterface::setContent(ware);
+}
+
 void IFileResponse::enableContentDisposition()
 {
     if(m_raw->m_contents.size() != 0){

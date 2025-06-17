@@ -13,6 +13,6 @@ IHttpAssetsAction::IHttpAssetsAction(const QString &path)
 void IHttpAssetsAction::invoke(IRequest &request) const
 {
     IResponse response (request);
-    response.setResponseWare(IFileResponse(m_path));
+    response.setContent(IFileResponse(m_path));
     request.startWrite();
 }

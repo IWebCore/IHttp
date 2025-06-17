@@ -16,6 +16,7 @@ public:
     void remove(const QString& key);
     QVariant value(const QString& name, const QVariant& val = {}) const;
     void setValue(const QString& name, const QVariant& value);
+    bool contains(const QString& name) const;
     void updateLastVisitTime();
 
 public:

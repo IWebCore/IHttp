@@ -30,10 +30,25 @@ IHttpHeaderJar &IResponse::headerJar()
     return m_impl.m_headerJar;
 }
 
-//IResponseHeader IResponse::operator[](const IString &header) const
-//{
-//    return {m_impl.m_respRaw, header};
-//}
+IHttpResponseHeader IResponse::operator[](const char *header) const
+{
+    return IHttpResponseHeader{m_impl.m_respRaw, IString(header)};
+}
+
+IHttpResponseHeader IResponse::operator[](const std::string &header) const
+{
+    return IHttpResponseHeader{m_impl.m_respRaw, IString(header)};
+}
+
+IHttpResponseHeader IResponse::operator[](const QString &header) const
+{
+    return IHttpResponseHeader{m_impl.m_respRaw, IString(header.toStdString())};
+}
+
+IHttpResponseHeader IResponse::operator[](const IString &header) const
+{
+    return IHttpResponseHeader{m_impl.m_respRaw, header};
+}
 
 IResponse &IResponse::setHeader(IStringView key, IStringView value)
 {
@@ -71,103 +86,62 @@ IResponse &IResponse::addCookie(IHttpCookiePart cookiePart)
     return *this;
 }
 
-template<>
-IResponse &IResponse::setContent<IString&&>(IString && value)
+IResponse& IResponse::setContent(const char *data)
+{
+    return setContent(IString(std::string(data)));
+}
+
+IResponse &IResponse::setContent(IString &&data)
 {
     m_impl.m_respRaw.setMime(IHttpMime::TEXT_PLAIN_UTF8);
-    m_impl.m_respRaw.setContent(new IHttpResponseContent(std::move(value)));
+    m_impl.m_respRaw.setContent(new IHttpResponseContent(std::move(data)));
     return *this;
 }
 
-template<>
-IResponse &IResponse::setContent<IString>(IString value)
+IResponse &IResponse::setContent(const IString &data)
 {
     m_impl.m_respRaw.setMime(IHttpMime::TEXT_PLAIN_UTF8);
-    m_impl.m_respRaw.setContent(new IHttpResponseContent(std::move(value)));
+    m_impl.m_respRaw.setContent(new IHttpResponseContent(data));
     return *this;
 }
 
-template<>
-IResponse &IResponse::setContent<const IString&>(const IString & value)
+IResponse &IResponse::setContent(std::string &&data)
 {
-    m_impl.m_respRaw.setMime(IHttpMime::TEXT_PLAIN_UTF8);
-    m_impl.m_respRaw.setContent(new IHttpResponseContent(value));
-    return *this;
+    return setContent(IString(std::move(data)));
 }
 
-template<>
-IResponse &IResponse::setContent<const char*>(const char * value)
+IResponse &IResponse::setContent(const std::string &data)
 {
-    return setContent(IString(std::string(value)));
+    return setContent(IString(data));
 }
 
-template<>
-IResponse &IResponse::setContent<std::string>(std::string value)
+IResponse &IResponse::setContent(QByteArray &&data)
 {
-    return setContent(IString(std::move(value)));
+    return setContent(IString(std::move(data)));
 }
 
-template<>
-IResponse &IResponse::setContent<std::string &&>(std::string && value)
+IResponse &IResponse::setContent(const QByteArray &data)
 {
-    return setContent(IString(std::move(value)));
+    return setContent(IString(data));
 }
 
-template<>
-IResponse &IResponse::setContent<const std::string&>(const std::string &value)
+IResponse &IResponse::setContent(const QString &data)
 {
-    return setContent(IString(value));
+    return setContent(IString(data.toStdString()));
 }
 
-template<>
-IResponse &IResponse::setContent<QByteArray>(QByteArray value)
+IResponse &IResponse::setContent(IStringView data)
 {
-    return setContent(IString(std::move(value)));
+    return setContent(IString(data));
 }
 
-template<>
-IResponse &IResponse::setContent<QByteArray&&>(QByteArray&& value)
-{
-    return setContent(IString(std::move(value)));
-}
-
-template<>
-IResponse &IResponse::setContent<const QByteArray&>(const QByteArray & value)
-{
-    return setContent(IString(value));
-}
-
-template<>
-IResponse &IResponse::setContent<QString>(QString view)
-{
-    return setContent(IString(view.toStdString()));
-}
-
-template<>
-IResponse &IResponse::setContent<QString&&>(QString &&view)
-{
-    return setContent(IString(view.toStdString()));
-}
-
-template<>
-IResponse &IResponse::setContent<const QString&>(const QString &view)
-{
-    return setContent(IString(view.toStdString()));
-}
-
-template<>
-IResponse &IResponse::setContent<IStringView>(IStringView view)
-{
-    return setContent(IString(view));
-}
-
-IResponse &IResponse::setResponseWare(const IHttpResponseWare &ware)
+IResponse &IResponse::setContent(const IHttpResponseWare &ware)
 {
     m_impl.setResponseWare(ware);
     return *this;
 }
 
-IResponse &IResponse::setInvalidWare(const IHttpInvalidWare &ware)
+IResponse &IResponse::setContent(const IHttpInvalidWare &ware)
 {
     setInvalid(ware);
     return *this;

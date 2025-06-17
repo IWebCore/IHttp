@@ -4,16 +4,15 @@
 
 $PackageWebCoreBegin
 
-// TODO: 补充 operator=
 class IHttpResponseRaw;
-class IResponseHeader
+class IHttpResponseHeader
 {
 public:
-    IResponseHeader(IHttpResponseRaw& raw, const IString& key);
+    explicit IHttpResponseHeader(IHttpResponseRaw& raw, const IString& key);
 
 public:
     operator IStringView() noexcept;
-//    const IResponseHeader& operator=(const IString& value);
+    const IHttpResponseHeader& operator=(const IString& value);
     IStringView key();
     IStringView value();
 

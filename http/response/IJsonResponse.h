@@ -13,7 +13,7 @@ class IJsonResponse : public IHttpResponseInterface<IJsonResponse>
     $AsResponse(IJsonResponse)
 public:
     using IHttpResponseInterface::IHttpResponseInterface;
-//    using IResponseInterface::operator [];
+    using IHttpResponseInterface::operator [];
 
 public:
     IJsonResponse();
@@ -34,6 +34,9 @@ public:
 
     template<typename T>
     IJsonResponse(const T& value);
+
+    using IHttpResponseInterface::setContent;
+    void setContent(const IJson& value);
 
 public:
     virtual std::string prefixMatcher() final;

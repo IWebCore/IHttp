@@ -2,7 +2,7 @@
 
 #include "core/config/IConfigPreProcessor.h"
 
-#define $setHttpAssetsEnabled( boolValue )  \
+#define $SetHttpAssetsEnabled( boolValue )  \
     PP_PROFILE_CONFIG(SetHttpAssetsEnabled, /http/assets/enabled, boolValue)
 
 #define $SetHttpAssetsPath( path_str )  \

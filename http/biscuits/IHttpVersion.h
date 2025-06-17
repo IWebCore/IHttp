@@ -15,6 +15,8 @@ enum class IHttpVersion
 
 namespace IHttpVersionUtil {
     const IString& toString(IHttpVersion version);
+    IHttpVersion toVersion(const char* version);
+    IHttpVersion toVersion(const std::string& version);
     IHttpVersion toVersion(const QString& version);
     IHttpVersion toVersion(const IString& version);
 }

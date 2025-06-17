@@ -2,7 +2,9 @@
 #include "http/IHttpManage.h"
 #include "core/util/ISpawnUtil.h"
 #include "core/config/IContextImport.h"
+#include "http/IHttpAbort.h"
 #include "http/controller/IHttpControllerAction.h"
+
 
 $PackageWebCoreBegin
 
@@ -44,7 +46,10 @@ void IHttpControllerNode::setAction(const IHttpControllerAction &action)
 {
     auto ptr = getAction(action.m_httpMethod);
     if(ptr){
-        qFatal("action already registered");
+        auto tip = QString("action already registered, please check whether two more functions mapped by one path. ")
+                .append("  SIGNATURE: ").append(action.m_callable.m_signature)
+                .append( " PATH: ").append(action.m_path.m_path);
+        IHttpAbort::abortHttpPathError(tip, $ISourceLocation);
     }
 
     auto newAction = new IHttpControllerAction(action);

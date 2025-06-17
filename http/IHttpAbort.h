@@ -11,7 +11,8 @@ class IHttpAbort : public IAbortInterface<IHttpAbort>
         ArgumentTypeError,
         HttpPathError,
         HttpPathFragmentError,
-        HttpCallableError
+        HttpCallableError,
+        MappingAndFunctionMismatch
     )
 
 protected:
@@ -22,7 +23,8 @@ protected:
             {ArgumentTypeError, "some error occured when processing method argument"},
             {HttpPathError, "error exist when parse controller mapping path(http path)"},
             {HttpPathFragmentError, "error exist when parse controller mapping path fragment(http path fragment)"},
-            {HttpCallableError, "error exist in http callable"}
+            {HttpCallableError, "error exist in http callable"},
+            {MappingAndFunctionMismatch, "your controller mapping can not find the correct function, check your function name"}
         };
     }
 };

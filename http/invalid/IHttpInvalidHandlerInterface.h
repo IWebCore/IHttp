@@ -11,7 +11,7 @@ class IHttpInvalidWare;
 class IHttpInvalidHandlerWare
 {
 public:
-    virtual void handle(const IHttpInvalidWare&, IHttpResponseRaw&) const{}
+    virtual void handle(const IHttpInvalidWare&, IHttpResponseRaw&) const {}
 };
 
 template<typename T, typename Invalid, bool enabled=true>
@@ -31,8 +31,8 @@ double IHttpInvalidHandlerInterface<T, Invalid, enabled>::$order() const
 template<typename T, typename Invalid, bool enabled>
 void IHttpInvalidHandlerInterface<T, Invalid, enabled>::$task()
 {
-    if constexpr (enabled){
-        IHttpManage::instance().registInvalidHandler(IMetaUtil::getTypeName<T>(), T::instance());
+    if /*constexpr*/ (enabled){
+        IHttpManage::instance().registInvalidHandler(IMetaUtil::getTypeName<Invalid>(), &ISolo<T>());
     }
 }
 

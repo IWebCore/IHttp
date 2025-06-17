@@ -13,9 +13,9 @@ void IHttpHeader::remove(const IString& key)
     m_header.erase(key);
 }
 
-std::vector<IStringView> IHttpHeader::keys() const
+IStringViewList IHttpHeader::keys() const
 {
-    std::vector<IStringView> ret;
+    IStringViewList ret;
     for(const auto& pair : m_header){
         ret.push_back(pair.first.m_view);
     }

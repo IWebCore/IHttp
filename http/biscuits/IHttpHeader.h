@@ -9,7 +9,7 @@ struct IHttpHeader
 public:
     void insert(IString key, IString value);
     void remove(const IString& key);
-    std::vector<IStringView> keys() const;
+    IStringViewList keys() const;
     IStringView value(const IString& key) const;
     bool contain(const IString& key) const;
     bool isEmpty() const;

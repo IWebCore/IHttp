@@ -33,7 +33,7 @@ public:
     IHttpCookiePart& setHttpOnly(bool m_httpOnly);
     IHttpCookiePart& setSameSite(SameSiteType m_sameSite);
 
-    std::vector<IStringView> toHeaderString() const;
+    IStringViewList toHeaderString() const;
 
     bool isValid();
 

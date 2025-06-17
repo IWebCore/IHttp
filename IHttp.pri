@@ -58,10 +58,10 @@ HEADERS += \
     $$PWD/http/detail/IHttpChunkedFlow.h \
     $$PWD/http/detail/IHttpRequestImpl.h \
     $$PWD/http/detail/IHttpRequestRaw.h \
+    $$PWD/http/detail/IHttpResponseHeader.h \
     $$PWD/http/detail/IHttpResponseRaw.h \
-    $$PWD/http/detail/IResponseHeader.h \
     $$PWD/http/detail/task/IHttpDefaultProfileTask.h \
-    $$PWD/http/detail/task/IHttpFileServiceTask.h \
+#    $$PWD/http/detail/task/IHttpFileServiceTask.h \
     $$PWD/http/detail/task/IHttpPrintTraceTask.h \
     $$PWD/http/detail/task/IHttpResolverFactory.h \
     $$PWD/http/filter/IHttpBodyFilterInterface.h \
@@ -81,7 +81,7 @@ HEADERS += \
     $$PWD/http/path/IHttpPath.h \
     $$PWD/http/path/IHttpPathFragment.h \
     $$PWD/http/path/IHttpPathValidatorInterface.h \
-    $$PWD/http/path/detail/IHttpPathDetail.h \
+#    $$PWD/http/path/detail/IHttpPathDetail.h \
     $$PWD/http/path/detail/IHttpPathFragmentDetail.h \
     $$PWD/http/path/detail/IHttpPathValidatorsTask.h \
     $$PWD/http/response/IBytesResponse.h \
@@ -141,18 +141,19 @@ SOURCES += \
     $$PWD/http/controller/IHttpControllerNode.cpp \
     $$PWD/http/controller/detail/IHttpControllerCallableInfo.cpp \
     $$PWD/http/detail/IHttpRequestImpl.cpp \
+    $$PWD/http/detail/IHttpResponseHeader.cpp \
     $$PWD/http/detail/IHttpResponseRaw.cpp \
-    $$PWD/http/detail/IResponseHeader.cpp \
     $$PWD/http/detail/task/IHttpDefaultProfileTask.cpp \
-    $$PWD/http/detail/task/IHttpFileServiceTask.cpp \
+#    $$PWD/http/detail/task/IHttpFileServiceTask.cpp \
     $$PWD/http/detail/task/IHttpPrintTraceTask.cpp \
     $$PWD/http/detail/task/IHttpResolverFactory.cpp \
     $$PWD/http/invalid/IHttpBadRequestInvalid.cpp \
     $$PWD/http/invalid/IHttpInternalErrorInvalid.cpp \
     $$PWD/http/invalid/IHttpInvalidWare.cpp \
     $$PWD/http/invalid/IHttpNotFoundInvalid.cpp \
+    $$PWD/http/path/IHttpPath.cpp \
     $$PWD/http/path/IHttpPathFragment.cpp \
-    $$PWD/http/path/detail/IHttpPathDetail.cpp \
+#    $$PWD/http/path/detail/IHttpPathDetail.cpp \
     $$PWD/http/path/detail/IHttpPathFragmentDetail.cpp \
     $$PWD/http/path/detail/IHttpPathValidatorsTask.cpp \
     $$PWD/http/response/IBytesResponse.cpp \
