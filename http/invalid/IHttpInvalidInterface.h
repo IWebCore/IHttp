@@ -41,7 +41,7 @@ IHttpInvalidInterface<T, enabled>::IHttpInvalidInterface(IHttpStatus status, con
         }
         auto handler = IHttpManage::instance().getInvalidHandler(IMetaUtil::getTypeName<T>());
         if(handler){
-            s_funs = [=](const IHttpInvalidWare& ware, IHttpResponseRaw& respRaw) {
+            s_funs = [handler](const IHttpInvalidWare& ware, IHttpResponseRaw& respRaw) {
                 handler->handle(ware, respRaw);
             };
         }

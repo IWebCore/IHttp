@@ -3,16 +3,9 @@
 #include "core/task/unit/ITaskWareUnit.h"
 #include "http/IHttpTaskCatagory.h"
 #include "http/IHttpManage.h"
+#include "http/invalid/IHttpInvalidHandlerWare.h"
 
 $PackageWebCoreBegin
-
-class IHttpResponseRaw;
-class IHttpInvalidWare;
-class IHttpInvalidHandlerWare
-{
-public:
-    virtual void handle(const IHttpInvalidWare&, IHttpResponseRaw&) const {}
-};
 
 template<typename T, typename Invalid, bool enabled=true>
 class IHttpInvalidHandlerInterface : public IHttpInvalidHandlerWare, public ITaskWareUnit<T, IHttpTaskCatagory, enabled>, public ISoloUnit<T>

@@ -10,8 +10,11 @@ public:                                                                         
     }                                                                                             \
 private:
 
-#define PP_CONTROLLER_PROP(name, type, index)    \
+#define PP_CONTROLLER_CALLABLE_MAPPING(name, type, index)    \
     PP_STRING(IHttpControllerCallableMapping$$$ ## name ## $$$ ## type ## $$$ ## index)
+
+#define PP_CONTROLLER_CALLABLE_PROPERTY(name, key, index)   \
+    PP_STRING(IHttpControllerCallableProperty$$$ ## name ## $$$ ## key ## $$$ ## index)
 
 #ifndef Q_MOC_RUN
     #define $Path(name)       name

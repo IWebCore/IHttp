@@ -93,4 +93,14 @@ std::vector<IHttpFilterWare*> IHttpManage::getFilters(IHttpFilterWare::Type type
     return m_resolverFilterWare[type];
 }
 
+void IHttpManage::registerOptionsMethodHandler(IHttpOptionsMethodHandlerWare *ware)
+{
+    m_optionsMethodHandlers.push_back(ware);
+}
+
+const std::vector<IHttpOptionsMethodHandlerWare *> &IHttpManage::getOptionsMethodHandlers() const
+{
+    return m_optionsMethodHandlers;
+}
+
 $PackageWebCoreEnd

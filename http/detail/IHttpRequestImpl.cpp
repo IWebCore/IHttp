@@ -217,11 +217,11 @@ bool IHttpRequestImpl::prepareChunkedData()
     return true;
 }
 
-// TODO: 这个可以通过 debug 优化， 判断，因为实在是太浪费性能了，占到总性能的四成以上。
 void IHttpRequestImpl::parseFirstLine(IStringView line)
 {
     line = line.trimmed();
 
+    // bad regex!!!
     //static const std::regex URI_REGEX(R"(^(\/[\w\-._~%!$&'()*+,;=:@/]*(\?[\w\-._~%!$&'()*+,;=:@/?]*)?|https?:\/\/[\w\-._~%!$&'()*+,;=:@]+\.[\w\-._~%!$&'()*+,;=:@]+(:\d+)?(\/[\w\-._~%!$&'()*+,;=:@/]*(\?[\w\-._~%!$&'()*+,;=:@/?]*)?)?|[*])$)");
     static $UInt urlMaxLength{ "/http/urlMaxLength", 1024 * 8 };
     if (line.length() >= *urlMaxLength) {
@@ -689,7 +689,7 @@ void IHttpRequestImpl::setInvalid(const IHttpInvalidWare& ware)
 void IHttpRequestImpl::setResponseWare(const IHttpResponseWare &ware)
 {
     m_isValid &= ware.m_raw->m_isValid;
-    m_respRaw.setResponseWare(ware);
+    m_respRaw.setContent(ware);
 }
 
 bool IHttpRequestImpl::isSessionExist() const

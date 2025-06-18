@@ -8,27 +8,27 @@ IRedirectResponse::IRedirectResponse()
     m_raw->m_status = IHttpStatus::FOUND_302;
 }
 
-IRedirectResponse::IRedirectResponse(const char *data)
+IRedirectResponse::IRedirectResponse(const char *data, IHttpStatus status)
 {
-    m_raw->m_status = IHttpStatus::FOUND_302;
+    m_raw->m_status = status;
     this->m_redirectPath = data;
     updateLocationPath();
 }
 
-IRedirectResponse::IRedirectResponse(const QString &path)
+IRedirectResponse::IRedirectResponse(const QString &path, IHttpStatus status)
 {
-    m_raw->m_status = IHttpStatus::FOUND_302;
+    m_raw->m_status = status;
     this->m_redirectPath = path;
     updateLocationPath();
 }
 
-IRedirectResponse::IRedirectResponse(const std::string &path)
-    : IRedirectResponse(QString::fromStdString(path))
+IRedirectResponse::IRedirectResponse(const std::string &path, IHttpStatus status)
+    : IRedirectResponse(QString::fromStdString(path), status)
 {
 }
 
-IRedirectResponse::IRedirectResponse(const IString &&path)
-    : IRedirectResponse(path.toStdString())
+IRedirectResponse::IRedirectResponse(const IString &&path, IHttpStatus status)
+    : IRedirectResponse(path.toStdString(), status)
 {
 }
 

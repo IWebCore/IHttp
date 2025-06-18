@@ -25,6 +25,8 @@ HEADERS += \
     $$PWD/http/action/IHttpInvalidRequestAction.h \
     $$PWD/http/action/IHttpNotFoundAction.h \
     $$PWD/http/action/IHttpOptionsMethodAction.h \
+    $$PWD/http/action/IHttpOptionsMethodHandlerInterface.h \
+    $$PWD/http/action/IHttpOptionsMethodHandlerWare.h \
     $$PWD/http/assets/IHttpAssetsAction.h \
     $$PWD/http/assets/IHttpAssetsActionMapping.h \
     $$PWD/http/assets/IHttpAssetsAnnomacro.h \
@@ -55,6 +57,8 @@ HEADERS += \
     $$PWD/http/controller/pp/IPatchMappingPreProcessor.h \
     $$PWD/http/controller/pp/IPostMappingPreProcessor.h \
     $$PWD/http/controller/pp/IPutMappingPreProcessor.h \
+    $$PWD/http/cors/IHttpCorsFilter.h \
+    $$PWD/http/cors/IHttpCorsPreprocessor.h \
     $$PWD/http/detail/IHttpChunkedFlow.h \
     $$PWD/http/detail/IHttpRequestImpl.h \
     $$PWD/http/detail/IHttpRequestRaw.h \
@@ -75,6 +79,7 @@ HEADERS += \
     $$PWD/http/invalid/IHttpBadRequestInvalid.h \
     $$PWD/http/invalid/IHttpInternalErrorInvalid.h \
     $$PWD/http/invalid/IHttpInvalidHandlerInterface.h \
+    $$PWD/http/invalid/IHttpInvalidHandlerWare.h \
     $$PWD/http/invalid/IHttpInvalidInterface.h \
     $$PWD/http/invalid/IHttpInvalidWare.h \
     $$PWD/http/invalid/IHttpNotFoundInvalid.h \
@@ -140,6 +145,7 @@ SOURCES += \
     $$PWD/http/controller/IHttpControllerActionMapping.cpp \
     $$PWD/http/controller/IHttpControllerNode.cpp \
     $$PWD/http/controller/detail/IHttpControllerCallableInfo.cpp \
+    $$PWD/http/cors/IHttpCorsFilter.cpp \
     $$PWD/http/detail/IHttpRequestImpl.cpp \
     $$PWD/http/detail/IHttpResponseHeader.cpp \
     $$PWD/http/detail/IHttpResponseRaw.cpp \
@@ -149,6 +155,7 @@ SOURCES += \
     $$PWD/http/detail/task/IHttpResolverFactory.cpp \
     $$PWD/http/invalid/IHttpBadRequestInvalid.cpp \
     $$PWD/http/invalid/IHttpInternalErrorInvalid.cpp \
+    $$PWD/http/invalid/IHttpInvalidHandlerWare.cpp \
     $$PWD/http/invalid/IHttpInvalidWare.cpp \
     $$PWD/http/invalid/IHttpNotFoundInvalid.cpp \
     $$PWD/http/path/IHttpPath.cpp \

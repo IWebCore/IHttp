@@ -1,5 +1,6 @@
 ﻿#include "IHttpOptionsMethodAction.h"
 #include "http/IRequest.h"
+#include "http/action/IHttpOptionsMethodHandlerWare.h"
 #include "http/detail/IHttpRequestImpl.h"
 #include "http/response/IHttpResponseWare.h"
 #include "http/invalid/IHttpNotFoundInvalid.h"
@@ -9,20 +10,38 @@
 
 $PackageWebCoreBegin
 
-// TODO: 这里实现不涉及 跨域问题, 之后补充
 void IHttpOptionsMethodAction::invoke(IRequest &request) const
 {
-    if(request.url() == "*"){
-        IHttpResponseWare ware;
-        ware.setHeader(IHttpHeader::Allow, AllowContent);
-        request.impl().setResponseWare(std::move(ware));
-    }else{
-        processUrlOptions(request);
+    static const auto& handlers = IHttpManage::instance().getOptionsMethodHandlers();
+    for(const auto& handler : handlers){
+        if(handler->handle(request)){
+            return request.startWrite();
+        }
     }
-    request.startWrite();
+
+    if(processStarOptions(request)){
+        return request.startWrite();
+    }
+    if(processUrlOptions(request)){
+        return request.startWrite();
+    }
 }
 
-void IHttpOptionsMethodAction::processUrlOptions(IRequest& request) const
+bool IHttpOptionsMethodAction::processStarOptions(IRequest &request) const
+{
+    static const IString AllowContent = "GET, HEAD, POST, PUT, DELETE, PATCH, OPTIONS";
+
+    if(request.url() != "*"){
+        return false;
+    }
+
+    IHttpResponseWare ware;
+    ware.setHeader(IHttpHeader::Allow, AllowContent);
+    request.impl().setResponseWare(std::move(ware));
+    return true;
+}
+
+bool IHttpOptionsMethodAction::processUrlOptions(IRequest& request) const
 {
     static const QList<IHttpMethod> METHODS = {
         IHttpMethod::GET, IHttpMethod::POST, IHttpMethod::PUT,
@@ -50,6 +69,7 @@ void IHttpOptionsMethodAction::processUrlOptions(IRequest& request) const
         ware.setHeader(IHttpHeader::Allow, ret);
         request.impl().setResponseWare(ware);
     }
+    return true;
 }
 
 $PackageWebCoreEnd

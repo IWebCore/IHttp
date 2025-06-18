@@ -9,7 +9,7 @@ struct IHttpArgumentTypeDetail : public IHttpArgumentType
 {
     using CreateFun = void (IHttpArgumentTypeDetail::*)();
 public:
-    IHttpArgumentTypeDetail(int typeId, QByteArray typeName, QByteArray nameRaw);   // TODO: better to add signature,but skip here now.
+    IHttpArgumentTypeDetail(int typeId, QByteArray typeName, QByteArray nameRaw);
 
 private:
     void resolveName();

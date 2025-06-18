@@ -8,7 +8,6 @@ template<typename T, bool enabled = true>
 class IHttpPostHandleFilterInterface
     : public IHttpFilterInterface<T, IHttpFilterWare::Type::PostHandle, enabled>
 {
-
 };
 
 $PackageWebCoreEnd

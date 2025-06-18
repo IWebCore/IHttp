@@ -985,7 +985,7 @@ void IHttpArgumentTypeDetail::createFormType()
     };
 }
 
-// TODO: optional latter!!!
+// NOTE: optional in latter time
 void IHttpArgumentTypeDetail::createJsonType()
 {
     if(m_position != Position::Json){

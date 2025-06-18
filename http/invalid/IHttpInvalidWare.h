@@ -6,6 +6,7 @@
 $PackageWebCoreBegin
 
 class IHttpResponseRaw;
+class IHttpResponseContent;
 class IHttpInvalidWare
 {
     friend class IHttpInvalidReponseContent;

@@ -27,7 +27,6 @@ IHttpReturnTypeDetail::IHttpReturnTypeDetail(QMetaType::Type type, const std::st
     createResolveFuntion();
 }
 
-// TODO: createBeanFun 这里拦截的东西过多，可以详细查看一下
 // 另外，之后考虑用户可以自定义返回类型。
 void IHttpReturnTypeDetail::createResolveFuntion()
 {

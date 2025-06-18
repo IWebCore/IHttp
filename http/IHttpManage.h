@@ -1,17 +1,17 @@
 ﻿#pragma once
 
 #include "core/unit/ISoloUnit.h"
-#include "http/IRequest.h"
 #include "http/biscuits/IHttpStatus.h"
 #include "http/filter/IHttpFilterWare.h"
 
 $PackageWebCoreBegin
 
-//class IRequest;
+class IRequest;
 class IHttpActionWare;
+class IHttpFilterWare;
 class IHttpActionMappingWare;
 class IHttpInvalidHandlerWare;
-class IHttpFilterWare;
+class IHttpOptionsMethodHandlerWare;
 class IHttpManage : public ISoloUnit<IHttpManage>
 {
     using ValidatorFun = std::function<bool(IStringView)>;
@@ -35,11 +35,15 @@ public:
     void registerFilter(IHttpFilterWare*);
     std::vector<IHttpFilterWare*> getFilters(IHttpFilterWare::Type type);
 
+    void registerOptionsMethodHandler(IHttpOptionsMethodHandlerWare*);
+    const std::vector<IHttpOptionsMethodHandlerWare*>& getOptionsMethodHandlers() const;
+
     template<IHttpFilterWare::Type type>
     void invokeFilters(IRequest&);
 
 private:
     bool m_isServerStarted{false};
+    std::vector<IHttpOptionsMethodHandlerWare*> m_optionsMethodHandlers;
     std::vector<IHttpActionMappingWare*> m_ActionMappings;
     QMap<QString, IHttpInvalidHandlerWare*> m_invalidHandlers;
     QMap<QString, ValidatorFun> m_pathFunValidators;

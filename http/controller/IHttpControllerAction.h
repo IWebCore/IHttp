@@ -16,15 +16,18 @@ private:
 public:
     virtual void invoke(IRequest &req) const final;
 
+public:
+    void setProperty(const QString&key, const QString& value);
+
 private:
     ParamType createParams(IRequest&) const;
     void destroyParams(const ParamType&) const;
 
 public:
-//    void* m_parentNode{};
     IHttpPath m_path;
     IHttpMethod m_httpMethod;
     IHttpCallable m_callable;
+    QMap<QString, QStringList>* m_properties{};
 };
 
 $PackageWebCoreEnd

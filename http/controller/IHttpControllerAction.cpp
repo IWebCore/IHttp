@@ -25,6 +25,14 @@ void IHttpControllerAction::invoke(IRequest &request) const
     request.startWrite();
 }
 
+void IHttpControllerAction::setProperty(const QString &key, const QString &value)
+{
+    if(!m_properties){
+        m_properties = new QMap<QString, QStringList>();
+    }
+    m_properties->operator [](key).append(value);
+}
+
 IHttpControllerAction::ParamType IHttpControllerAction::createParams(IRequest& request) const
 {
     ParamType params{0};

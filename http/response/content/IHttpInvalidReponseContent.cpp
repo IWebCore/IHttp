@@ -7,7 +7,7 @@ IHttpInvalidReponseContent::IHttpInvalidReponseContent(const IHttpInvalidWare &w
     :IHttpResponseContent(ware.description)
 {
     if(ware.m_processor){
-        m_processor = [=](const IHttpResponseContent&, IHttpResponseRaw& raw){
+        m_processor = [=](const IHttpResponseContent&content, IHttpResponseRaw& raw){
             ware.m_processor(ware, raw);
         };
     }

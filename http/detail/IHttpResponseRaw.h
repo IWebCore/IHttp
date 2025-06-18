@@ -37,7 +37,7 @@ public:
     void setCookie(IHttpCookiePart&&);
     void setCookie(const IHttpCookiePart&);
     void setCookie(const IString& key, const IString& value);
-    void setResponseWare(const IHttpResponseWare&);
+    void setContent(const IHttpResponseWare&);
 
 public:
     void prepareResult(IHttpRequestImpl&);

@@ -1,4 +1,5 @@
 ﻿#include "IHttpDefaultAssets.h"
+#include "http/IRequest.h"
 #include "core/config/IProfileImport.h"
 #include "http/assets/IHttpAssetsAction.h"
 

@@ -8,6 +8,13 @@
 
 $PackageWebCoreBegin
 
+namespace detail
+{
+    static constexpr char CONTROLLER_CALLABLE_MAPPING_PREFIX[] = "IHttpControllerCallableMapping$$$";
+    static constexpr char CONTROLLER_CALLABLE_PROPERTY_PREFIX [] = "IHttpControllerCallableProperty$$$";
+    static constexpr char CONTROLLER_MAPPING_FLAG[] = "IHttpControllerMapping$";
+}
+
 IHttpCallableMappingInfo::IHttpCallableMappingInfo(const QString &key)
 {
     auto args = key.split("$$$");
@@ -26,14 +33,15 @@ IHttpCallableMappingInfo::IHttpCallableMappingInfo(const QString &key)
 
 IHttpControllerCallableInfo::IHttpControllerCallableInfo(void* handler_, const QString &className_, const QMap<QString, QString> &classInfo_, const QVector<QMetaMethod> &methods_)
 {
-    this->handler = handler_;
-    this->className = className_;
-    this->classInfo = classInfo_;
-    this->classMethods = methods_;
+    this->m_handler = handler_;
+    this->m_className = className_;
+    this->m_classInfos = classInfo_;
+    this->m_classMethods = methods_;
 
     parseRootPaths();
     parseMapppingInfos();
-    parseMappingLeaves();
+    parseToActions();
+    findActionsProperties();
 
     checkPathArgumentMatch();
     checkMappingOverloadFunctions();
@@ -42,20 +50,19 @@ IHttpControllerCallableInfo::IHttpControllerCallableInfo(void* handler_, const Q
 
 void IHttpControllerCallableInfo::parseMapppingInfos()
 {
-    static constexpr char CONTROLLER_INFO_PREFIX[] = "IHttpControllerCallableMapping$$$";
-    auto keys = classInfo.keys();
+    auto keys = m_classInfos.keys();
     for(auto key : keys){
-        if(key.startsWith(CONTROLLER_INFO_PREFIX)){
+        if(key.startsWith(detail::CONTROLLER_CALLABLE_MAPPING_PREFIX)){
             IHttpCallableMappingInfo info(key);
             info.m_fragments = rootFragments;
-            auto fragments = parseFragments(classInfo[key]);
+            auto fragments = parseFragments(m_classInfos[key]);
             info.m_fragments.insert(info.m_fragments.end(), fragments.begin(), fragments.end());
             m_mappingInfos.append(info);
         }
     }
 }
 
-void IHttpControllerCallableInfo::parseMappingLeaves()
+void IHttpControllerCallableInfo::parseToActions()
 {
     for(const IHttpCallableMappingInfo& mapping : m_mappingInfos){
         IHttpControllerAction node;
@@ -66,23 +73,36 @@ void IHttpControllerCallableInfo::parseMappingLeaves()
     }
 }
 
+void IHttpControllerCallableInfo::findActionsProperties()
+{
+    auto keys = m_classInfos.keys();
+    for(IHttpControllerAction& action : m_actionNodes){
+        QString methodName = action.m_callable.m_metaMethod.name();
+        QString prefix = QString(detail::CONTROLLER_CALLABLE_PROPERTY_PREFIX).append(methodName).append("$$$");
+        for(auto info : keys){
+            if(info.startsWith(prefix)){
+                auto name = info.mid(prefix.length()).split("$$$").first();
+                action.setProperty(name, m_classInfos[info]);
+            }
+        }
+    }
+}
+
 void IHttpControllerCallableInfo::parseRootPaths()
 {
-    static constexpr char CONTROLLER_MAPPING_FLAG[] = "IHttpControllerMapping$";
-    if(classInfo.contains(CONTROLLER_MAPPING_FLAG) && !classInfo[CONTROLLER_MAPPING_FLAG].isEmpty()){
-        rootFragments = parseFragments(classInfo[CONTROLLER_MAPPING_FLAG]);
+    if(m_classInfos.contains(detail::CONTROLLER_MAPPING_FLAG) && !m_classInfos[detail::CONTROLLER_MAPPING_FLAG].isEmpty()){
+        rootFragments = parseFragments(m_classInfos[detail::CONTROLLER_MAPPING_FLAG]);
     }
 }
 
 std::vector<IHttpPathFragment> IHttpControllerCallableInfo::parseFragments(const QString &path)
 {
-    static constexpr char CONTROLLER_MAPPING_FLAG[] = "IHttpControllerMapping$";
     std::vector<IHttpPathFragment> ret;
     auto args =  path.split("/");
     for(const QString& arg : args){
         auto piece = arg.trimmed();
         if(piece == "." || piece == ".."){
-            IHttpControllerAbort::abortUrlDotAndDotDotError("Controller mapping:" + classInfo[CONTROLLER_MAPPING_FLAG]);
+            IHttpControllerAbort::abortUrlDotAndDotDotError("Controller mapping:" + m_classInfos[detail::CONTROLLER_MAPPING_FLAG]);
         }
         if(!piece.isEmpty()){
             ret.push_back(ISpawnUtil::construct<IHttpPathFragment>(piece));
@@ -93,12 +113,12 @@ std::vector<IHttpPathFragment> IHttpControllerCallableInfo::parseFragments(const
 
 IHttpCallable IHttpControllerCallableInfo::getHttpMethodNode(const QString &name)
 {
-    for(const QMetaMethod& method : classMethods){
+    for(const QMetaMethod& method : m_classMethods){
         if(name == method.name()){
-            return ISpawnUtil::construct<IHttpCallable>(handler, className, method);
+            return ISpawnUtil::construct<IHttpCallable>(m_handler, m_className, method);
         }
     }
-    QString tip = QString("CLASS: ").append(className).append(" FUNCTION NAME: ").append(name);
+    QString tip = QString("CLASS: ").append(m_className).append(" FUNCTION NAME: ").append(name);
     IHttpAbort::abortMappingAndFunctionMismatch(tip, $ISourceLocation);
     return {};
 }
@@ -125,7 +145,7 @@ void IHttpControllerCallableInfo::checkMappingOverloadFunctions()
     }
 
     QStringList names;
-    for(const auto& method : classMethods){
+    for(const auto& method : m_classMethods){
         if(usedMethods.contains(method.name())){
             if(names.contains(method.name())){
                 IHttpControllerAbort::abortOverloadOrDefaultValueFunctionNotSupported(QString("duplicated overloaded function name: ").append(method.name()));
@@ -143,7 +163,7 @@ void IHttpControllerCallableInfo::checkMappingNameAndFunctionIsMatch()
     }
 
     QSet<QString> methodNames;
-    for(const auto& method : classMethods){
+    for(const auto& method : m_classMethods){
         methodNames.insert(method.name());
     }
 

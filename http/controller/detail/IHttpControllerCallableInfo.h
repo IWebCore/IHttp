@@ -19,12 +19,13 @@ public:
 class IHttpControllerCallableInfo
 {
 public:
-    IHttpControllerCallableInfo(void *handler, const QString &className,
-                              const QMap<QString, QString> &classInfo,
+    IHttpControllerCallableInfo(void *m_handler, const QString &m_className,
+                              const QMap<QString, QString> &m_classInfos,
                               const QVector<QMetaMethod> &methods);
 private:
     void parseMapppingInfos();
-    void parseMappingLeaves();
+    void parseToActions();
+    void findActionsProperties();
     void parseRootPaths();
 
 private:
@@ -37,10 +38,10 @@ private:
     void checkMappingNameAndFunctionIsMatch();
 
 private:
-    void* handler{};
-    QString className;
-    QMap<QString, QString> classInfo;
-    QVector<QMetaMethod> classMethods;
+    void* m_handler{};
+    QString m_className;
+    QMap<QString, QString> m_classInfos;
+    QVector<QMetaMethod> m_classMethods;
 
 private:
     std::vector<IHttpPathFragment> rootFragments;

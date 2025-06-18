@@ -2,10 +2,10 @@
 
 //#include "IResponseInterface.h"
 #include "IHttpResponsePreProcessor.h"
+#include "http/biscuits/IHttpStatus.h"
 
 $PackageWebCoreBegin
 
-// TODO: 参数可以多添加一个 code， 让用户选择是哪个返回状态 301， 302， 307， 308
 class IRedirectResponse : public IHttpResponseInterface<IRedirectResponse>
 {
     $AsResponse(IRedirectResponse)
@@ -18,11 +18,11 @@ private:
 
 public:
     IRedirectResponse();
-    IRedirectResponse(const char* data);
-    IRedirectResponse(const QString &path);
-    IRedirectResponse(const std::string& path);
-    IRedirectResponse(const QByteArray&& path);
-    IRedirectResponse(const IString&& path);
+    IRedirectResponse(const char* data, IHttpStatus = IHttpStatus::FOUND_302);
+    IRedirectResponse(const QString &path, IHttpStatus = IHttpStatus::FOUND_302);
+    IRedirectResponse(const std::string& path, IHttpStatus = IHttpStatus::FOUND_302);
+    IRedirectResponse(const QByteArray&& path, IHttpStatus = IHttpStatus::FOUND_302);
+    IRedirectResponse(const IString&& path, IHttpStatus = IHttpStatus::FOUND_302);
 
 public:
     virtual std::string prefixMatcher() final;

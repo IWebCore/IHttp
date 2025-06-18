@@ -111,6 +111,34 @@ void IHttpResponseRaw::setContent(IHttpInvalidWare &&ware)
     setContent(ware);
 }
 
+void IHttpResponseRaw::setContent(const IHttpResponseWare &response)
+{
+    if(!response.mime().isEmpty()){
+        m_mime = response.mime();
+    }
+    if(response.status() != m_status){
+        m_status = response.status();
+    }
+
+    if(!response.headers().isEmpty()){
+        for(auto& [key, val] : response.headers().m_header){
+            setHeader(key, val);
+        }
+    }
+
+    if(!response.m_raw->m_cookies.empty()){
+        for(auto cookie : response.m_raw->m_cookies){
+            this->m_cookies.push_back(cookie);
+        }
+        response.m_raw->m_cookies.clear();
+    }
+
+    while(!response.m_raw->m_contents.empty()){
+        setContent(response.m_raw->m_contents.front());
+        response.m_raw->m_contents.pop_front();
+    }
+}
+
 void IHttpResponseRaw::setContent(IHttpResponseContent *ware)
 {
     m_contents.push_back(ware);
@@ -192,35 +220,6 @@ void IHttpResponseRaw::prepareHeaders(IHttpRequestImpl& impl)
     if(impl.m_connection.m_keepAlive){
         setHeader(IHttpHeader::Connection, "keep-alive");
         setHeader(IHttpHeader::KeepAlive, "timeout=10, max=50");
-    }
-}
-
-void IHttpResponseRaw::setResponseWare(const IHttpResponseWare &response)
-{
-    if(!response.mime().isEmpty()){
-        m_mime = response.mime();
-    }
-    if(response.status() != m_status){
-        m_status = response.status();
-    }
-
-    if(!response.headers().isEmpty()){
-        for(auto& [key, val] : response.headers().m_header){
-            setHeader(key, val);
-        }
-    }
-
-    if(!response.m_raw->m_cookies.empty()){
-        for(auto cookie : response.m_raw->m_cookies){
-            this->m_cookies.push_back(cookie);
-        }
-        response.m_raw->m_cookies.clear();
-    }
-
-    // NOTE: this break the const constrait, but its safe
-    while(!response.m_raw->m_contents.empty()){
-        setContent(response.m_raw->m_contents.front());
-        response.m_raw->m_contents.pop_front();
     }
 }
 
