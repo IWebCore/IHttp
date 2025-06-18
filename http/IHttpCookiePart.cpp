@@ -96,39 +96,39 @@ IStringViewList IHttpCookiePart::toHeaderString() const
         return ret;
     }
 
-    ret.push_back(IHttpHeader::SetCookie.m_view);
+    ret.push_back(IHttpHeader::SetCookie);
     ret.push_back(IHttp::COMMA_SPACE);
-    ret.push_back(m_key.m_view);
+    ret.push_back(m_key);
     ret.push_back(IHttp::EQUAL);
-    ret.push_back(m_value.m_view);
+    ret.push_back(m_value);
 
     if(!m_domain.isEmpty()){
-        ret.push_back(DomainIString.m_view);
-        ret.push_back(m_domain.m_view);
+        ret.push_back(DomainIString);
+        ret.push_back(m_domain);
     }
     if(!m_path.isEmpty()){
-        ret.push_back(PathIString.m_view);
-        ret.push_back(m_path.m_view);
+        ret.push_back(PathIString);
+        ret.push_back(m_path);
     }
     if(m_maxAge != std::numeric_limits<int>::min()){               // see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#browser_compatibility
         m_maxAgeString = std::to_string(m_maxAge);
-        ret.push_back(MaxAgeIString.m_view);
-        ret.push_back(IString(&m_maxAgeString).m_view);
+        ret.push_back(MaxAgeIString);
+        ret.push_back(IString(&m_maxAgeString));
     }
     if(m_expires.isValid()){
         m_expiresString = IConvertUtil::toUtcString(m_expires).toStdString();
-        ret.push_back(ExpiresIString.m_view);
-        ret.push_back(IString(&m_expiresString).m_view);
+        ret.push_back(ExpiresIString);
+        ret.push_back(IString(&m_expiresString));
     }
     if(m_sameSite != Lax){
-        ret.push_back(SameSiteIString.m_view);
-        ret.push_back(detail::sameSiteTypeToString(m_sameSite).m_view);
+        ret.push_back(SameSiteIString);
+        ret.push_back(detail::sameSiteTypeToString(m_sameSite));
     }
     if(m_secure){
-        ret.push_back(SecureIString.m_view);
+        ret.push_back(SecureIString);
     }
     if(m_httpOnly){
-        ret.push_back(HttpOnlyIString.m_view);
+        ret.push_back(HttpOnlyIString);
     }
 
     ret.push_back(IHttp::NEW_LINE);

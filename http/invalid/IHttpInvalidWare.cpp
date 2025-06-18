@@ -17,7 +17,7 @@ IHttpInvalidWare::IHttpInvalidWare(IHttpStatus code, const std::string& descript
 {
 }
 
-void IHttpInvalidWare::process(const IHttpInvalidWare&, IHttpResponseRaw&)
+void IHttpInvalidWare::process(const IHttpInvalidWare&, IHttpResponseRaw&) const
 {
     IGlobalAbort::abortUnReachableCode($ISourceLocation);
 }

@@ -66,6 +66,8 @@ public:
     virtual void startRead() final;
     virtual void resolve() final;
     virtual void startWrite() final;
+
+private:
     virtual std::vector<asio::const_buffer> getOutput() final;
 
 public:

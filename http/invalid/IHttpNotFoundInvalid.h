@@ -12,7 +12,7 @@ public:
     IHttpNotFoundInvalid(const std::string& description);
 
 public:
-    virtual void process(const IHttpInvalidWare&, IHttpResponseRaw&) final;
+    virtual void process(const IHttpInvalidWare&, IHttpResponseRaw&) const final;
 };
 
 $PackageWebCoreEnd

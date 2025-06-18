@@ -130,7 +130,7 @@ namespace detail{
         static std::once_flag flag;
         std::call_once(flag, [](){
             for(const auto& mime : mimes){
-                viewList.append(mime.m_view);
+                viewList.append(mime);
             }
         });
         return viewList;
@@ -246,7 +246,7 @@ IStringView IHttpMimeUtil::toString(IHttpMime mime)
     static const auto& mimes = detail::getMimeStringList();
     int mimeValue = static_cast<int>(mime);
     if(mimeValue < 0 || mimeValue >mimes.length()-1){
-        return IHttpMimeUtil::MIME_UNKNOWN_STRING.m_view;
+        return IHttpMimeUtil::MIME_UNKNOWN_STRING;
     }
 
     return mimes[static_cast<int>(mime)];
@@ -273,7 +273,7 @@ IHttpMime IHttpMimeUtil::toMime(const IString& data)
 IStringView IHttpMimeUtil::getSuffixMime(const IString &suffix)
 {
     if(suffix.isEmpty()){
-        return IHttpMimeUtil::MIME_UNKNOWN_STRING.m_view;
+        return IHttpMimeUtil::MIME_UNKNOWN_STRING;
     }
 
     static const IStringViewList keys = detail::getSystemSuffixMimeMap().keys();

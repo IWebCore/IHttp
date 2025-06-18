@@ -7,7 +7,7 @@ IStringView IHttpMethodUtil::toString(IHttpMethod method)
     if(method >= IHttpMethod::UNKNOWN){
         method = IHttpMethod::UNKNOWN;
     }
-    return methodNames()[static_cast<int>(method)].m_view;
+    return methodNames()[static_cast<int>(method)];
 }
 
 IHttpMethod IHttpMethodUtil::toMethod(const QString &name)

@@ -20,20 +20,18 @@ namespace detail
 IHttpFileResponseContent::IHttpFileResponseContent(IString && value)
     : IHttpResponseContent(std::move(value))
 {
-    setAttribute(&TYPE_NAME, &IHttpFileResponseContent::Type);
     m_processor = detail::fileResponseProcessor;
 }
 
 IHttpFileResponseContent::IHttpFileResponseContent(const IString & value)
     : IHttpResponseContent(value)
 {
-    setAttribute(&TYPE_NAME, &IHttpFileResponseContent::Type);
     m_processor = detail::fileResponseProcessor;
 }
 
 void detail::fileResponseProcessor(const IHttpResponseContent &content, IHttpResponseRaw &raw)
 {
-    QFileInfo info(content.m_content.m_view.toQString());
+    QFileInfo info(content.m_content.toQString());
     if(!info.exists()){
         raw.setMime(IHttpMime::TEXT_PLAIN_UTF8);
         raw.setContent(IHttpInternalErrorInvalid());
@@ -44,18 +42,17 @@ void detail::fileResponseProcessor(const IHttpResponseContent &content, IHttpRes
     raw.setContent(new IHttpResponseContent(std::move(data)));
     if(true && content.m_attribute
             && content.m_attribute->contains(IHttpFileResponseContent::ContentDispoistion)
-            && (content.m_attribute->operator [](IHttpFileResponseContent::ContentDispoistion)).m_view == IHttp::TRUE_STR)
+            && (content.m_attribute->operator [](IHttpFileResponseContent::ContentDispoistion)) == IHttp::TRUE_STR)
     {
         raw.m_headers.insert(IHttpHeader::ContentDisposition, detail::createDispoisition(content.m_content));
     }
 
-    // TODO: check mime appliancy!!!
     if(false || !content.m_attribute
              || !content.m_attribute->contains(IHttpFileResponseContent::ContentTypeEnabled)
-             || (content.m_attribute->operator [](IHttpFileResponseContent::ContentTypeEnabled)).m_view != IHttp::FALSE_STR)
+             || (content.m_attribute->operator [](IHttpFileResponseContent::ContentTypeEnabled)) != IHttp::FALSE_STR)
     {
         auto mime = detail::findMime(content.m_content);
-        if(mime != IHttpMimeUtil::MIME_UNKNOWN_STRING.m_view){
+        if(mime != IHttpMimeUtil::MIME_UNKNOWN_STRING){
             raw.m_headers.insert(IHttpHeader::ContentType, mime);
         }
     }
@@ -63,14 +60,13 @@ void detail::fileResponseProcessor(const IHttpResponseContent &content, IHttpRes
 
 IString detail::createDispoisition(const IString & data)
 {
-    auto path =data.m_view.toQString();
-    auto fileName  = QFileInfo(path).fileName();
+    auto fileName  = QFileInfo(data.toQString()).fileName();
     return (QString("attachment;filename=").append(ICodecUtil::urlEncode(fileName))).toUtf8();
 }
 
 IStringView detail::findMime(const IString& data)
 {
-    auto suffix = QFileInfo(data.m_view.toQString()).suffix();
+    auto suffix = QFileInfo(data.toQString()).suffix();
     return IHttpMimeUtil::getSuffixMime(IString(suffix.toUtf8()));
 }
 

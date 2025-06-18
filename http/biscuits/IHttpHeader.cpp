@@ -17,7 +17,7 @@ IStringViewList IHttpHeader::keys() const
 {
     IStringViewList ret;
     for(const auto& pair : m_header){
-        ret.push_back(pair.first.m_view);
+        ret.push_back(pair.first);
     }
     return ret;
 }

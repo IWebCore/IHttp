@@ -753,7 +753,7 @@ void IHttpArgumentTypeDetail::createQueryType()
 
     auto self = *this;
     this->m_createFun = [=](IRequest& req)->void*{
-        if(req.impl().m_reqRaw.m_queries.contains(self.m_name.m_view)){
+        if(req.impl().m_reqRaw.m_queries.contains(self.m_name)){
             auto data = req.impl().m_reqRaw.m_queries[self.m_name];
             auto ptr = detail::fromIStringToPtr(data, self.m_typeId, self.m_typeName);
             if(!ptr){
@@ -963,7 +963,7 @@ void IHttpArgumentTypeDetail::createFormType()
             return nullptr;
         }
 
-        if(req.impl().m_reqRaw.m_forms.contains(self.m_name.m_view)){
+        if(req.impl().m_reqRaw.m_forms.contains(self.m_name)){
             auto data = req.impl().m_reqRaw.m_forms[self.m_name];
             auto ptr = detail::fromIStringToPtr(data, self.m_typeId, self.m_typeName);
             if(!ptr){

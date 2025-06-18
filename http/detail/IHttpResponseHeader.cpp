@@ -22,12 +22,12 @@ const IHttpResponseHeader& IHttpResponseHeader::operator=(const IString &value)
 
 IStringView IHttpResponseHeader::key()
 {
-    return m_key.m_view;
+    return m_key;
 }
 
 IStringView IHttpResponseHeader::value()
 {
-    return m_raw.m_headers.value(m_key.m_view);
+    return m_raw.m_headers.value(&m_key);
 }
 
 $PackageWebCoreEnd

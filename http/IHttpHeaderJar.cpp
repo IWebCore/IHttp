@@ -21,7 +21,7 @@ bool IHttpHeaderJar::containRequestHeaderKey(const IString& key) const
 {
     const auto& keys = requestHeaderKeys();
     return std::find_if(keys.begin(), keys.end(), [&](IStringView data){
-        return data.equalIgnoreCase(key.m_view);
+        return data.equalIgnoreCase(key);
     }) != keys.end();
 }
 

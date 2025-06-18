@@ -2,7 +2,6 @@
 
 #include "core/util/IPreProcessorUtil.h"
 
-// TODO: 看看可能 不用写 path?
 #define $AsController(path)                                                                       \
     Q_CLASSINFO(PP_STRING(IHttpControllerMapping$), #path)                                        \
 public:                                                                                           \
@@ -14,7 +13,7 @@ private:
 #define PP_CONTROLLER_PROP(name, type, index)    \
     PP_STRING(IHttpControllerCallableMapping$$$ ## name ## $$$ ## type ## $$$ ## index)
 
-#ifndef  Q_MOC_RUN
+#ifndef Q_MOC_RUN
     #define $Path(name)       name
     #define $Query(name)      name
     #define $Header(name)     name

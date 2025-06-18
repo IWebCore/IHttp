@@ -17,6 +17,8 @@ class IHttpResponseRaw : public IStringViewStash        // TODO: check stash whe
 {
     friend class IHttpRequestImpl;
 public:
+    using RetType = std::vector<IStringView>;
+public:
     IHttpResponseRaw() = default;
     IHttpResponseRaw(IHttpResponseRaw&& rhs) = default;
     IHttpResponseRaw(const IHttpResponseRaw& rhs);
@@ -35,21 +37,26 @@ public:
     void setCookie(IHttpCookiePart&&);
     void setCookie(const IHttpCookiePart&);
     void setCookie(const IString& key, const IString& value);
-
-private:
     void setResponseWare(const IHttpResponseWare&);
 
 public:
     void prepareResult(IHttpRequestImpl&);
 
 public:
+    std::vector<asio::const_buffer> getResult();
+
+private:
+    void prepareHeaders(IHttpRequestImpl& impl);
+
+public:
     bool m_isValid{true};
     IString m_mime;
     IHttpStatus m_status {IHttpStatus::OK_200};
     IHttpHeader m_headers;
+    IStringView m_target;   // 将要写入的内容
     std::list<IHttpCookiePart> m_cookies;
     std::list<IHttpResponseContent*> m_contents;
-    std::vector<asio::const_buffer> m_result;
+    RetType m_result;
 };
 
 $PackageWebCoreEnd

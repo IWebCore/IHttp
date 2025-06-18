@@ -15,7 +15,7 @@ public:
     virtual ~IHttpInvalidWare() = default;
 
 public:
-    virtual void process(const IHttpInvalidWare&, IHttpResponseRaw&);
+    virtual void process(const IHttpInvalidWare&, IHttpResponseRaw&) const;
 
 public:
     IHttpStatus status{IHttpStatus::UNKNOWN};

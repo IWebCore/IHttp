@@ -18,7 +18,7 @@ IHttpServer::IHttpServer()
         m_port = *port;
     }
 
-    auto name = ISolo<IHttpResolverFactory>().getName().m_view;
+    const auto& name = ISolo<IHttpResolverFactory>().getName();
     m_resolverFactoryId = ITcpManage::instance().getResolverFactoryId(name);
 }
 

@@ -26,9 +26,6 @@ public:
     IString m_content{};
     std::function<void(const IHttpResponseContent&, IHttpResponseRaw&)> m_processor{nullptr};
     QMap<IString, IString>* m_attribute{nullptr};
-
-protected:
-    inline static const IString TYPE_NAME = "Type";
 };
 
 $PackageWebCoreEnd

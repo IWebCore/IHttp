@@ -8,6 +8,7 @@
 #include "http/response/content/IHttpInvalidReponseContent.h"
 #include "http/response/content/IHttpFileResponseContent.h"
 #include "tcp/ITcpConnection.h"
+#include <cstddef> // for offsetof
 
 $PackageWebCoreBegin
 
@@ -15,59 +16,38 @@ static const IString ServerHeader = "Server: IWebCore\r\n";
 
 namespace detail
 {
-IStringViewList generateFirstLine(IHttpRequestImpl& impl)
+void generateFirstLine(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 {
-    IStringViewList ret;
-    ret.push_back(IHttpVersionUtil::toString(impl.m_reqRaw.m_httpVersion).m_view);
+    ret.push_back(IHttpVersionUtil::toString(impl.m_reqRaw.m_httpVersion));
     ret.push_back(IHttp::SPACE);
     ret.push_back(impl.stash(std::to_string(static_cast<int>(impl.m_respRaw.m_status))));
     ret.push_back(IHttp::SPACE);
-    ret.push_back(IHttpStatusUtil::toStringDescription(impl.m_respRaw.m_status).m_view);
+    ret.push_back(IHttpStatusUtil::toStringDescription(impl.m_respRaw.m_status));
     ret.push_back(IHttp::NEW_LINE);
-
-    return ret;
 }
 
-IStringViewList generateCookieHeaders(IHttpRequestImpl& impl)
+void generateCookieHeaders(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 {
-    IStringViewList ret;
     for(const auto& cookie : impl.m_respRaw.m_cookies){
         auto vals = cookie.toHeaderString();
         for(auto val : vals){
             ret.push_back(val);
         }
     }
-
-    return ret;
 }
 
-IStringViewList generateHeadersContent(IHttpRequestImpl& m_raw, std::size_t contentSize)
+void generateHeadersContent(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& m_raw)
 {
     auto& headers = m_raw.m_respRaw.m_headers;
+    ret.reserve(1 + 4* headers.m_header.size() + ret.size());
 
-    headers.insert(IHttpHeader::ContentLength, IString(std::to_string(contentSize)));
-    if(contentSize != 0){
-        if(!headers.contain(IHttpHeader::ContentType) && !m_raw.m_respRaw.m_mime.isEmpty()){
-            headers.insert(IHttpHeader::ContentType, m_raw.m_respRaw.m_mime);
-        }
-    }
-
-    if(m_raw.m_connection.m_keepAlive){
-        headers.insert(IHttpHeader::Connection, "keep-alive");
-        headers.insert(IHttpHeader::KeepAlive, "timeout=10, max=50");
-    }
-
-    IStringViewList ret;
-    ret.push_back(ServerHeader.m_view);
-
+    ret.push_back(ServerHeader);
     for(const auto& pair : headers.m_header){
         ret.push_back(pair.first);
         ret.push_back(IHttp::COMMA_SPACE);
         ret.push_back(pair.second);
         ret.push_back(IHttp::NEW_LINE);
     }
-
-    return ret;
 }
 
 }
@@ -81,7 +61,6 @@ IHttpResponseRaw::IHttpResponseRaw(const IHttpResponseRaw &rhs)
     m_mime = rhs.m_mime;
     m_status = rhs.m_status;
     m_cookies = rhs.m_cookies;
-    m_result = rhs.m_result;
     for(auto content : m_contents){
         m_contents.push_back(new IHttpResponseContent(*content));
     }
@@ -95,7 +74,6 @@ IHttpResponseRaw &IHttpResponseRaw::operator=(const IHttpResponseRaw &rhs)
     m_mime = rhs.m_mime;
     m_status = rhs.m_status;
     m_cookies = rhs.m_cookies;
-    m_result = rhs.m_result;
     for(auto content : m_contents){
         m_contents.push_back(new IHttpResponseContent(*content));
     }
@@ -160,36 +138,60 @@ void IHttpResponseRaw::setCookie(const IString &key, const IString &value)
 
 void IHttpResponseRaw::prepareResult(IHttpRequestImpl& impl)
 {
-    // 这一步是做特殊的处理，将数据封装起来。
     while(!m_contents.empty() && m_contents.back()->m_processor){
         m_contents.back()->m_processor(*(m_contents.back()), *this);
     }
 
-    // first line
-    auto firstLine = detail::generateFirstLine(impl);
-    for(auto view : firstLine){
-        m_result.push_back(view.toAsioBuffer());
-    }
-
-    IStringView content{};
     if(!m_contents.empty()){
-        content = m_contents.back()->m_content.m_view;
+        m_target = m_contents.back()->m_content;
     }
 
-    // headers
-    auto headers = detail::generateHeadersContent(impl, content.size());
-    for(auto view : headers){
-        m_result.push_back(view.toAsioBuffer());
+    prepareHeaders(impl);
+
+    detail::generateFirstLine(m_result, impl);               // first line
+    detail::generateHeadersContent(m_result, impl);     // headers
+    detail::generateCookieHeaders(m_result, impl);      // cookies
+    m_result.push_back(IHttp::NEW_LINE);
+
+    if(!m_target.empty()  && impl.m_reqRaw.m_method != IHttpMethod::HEAD){   // body
+        m_result.push_back(m_target);
+    }
+}
+
+std::vector<asio::const_buffer> IHttpResponseRaw::getResult()
+{
+    std::vector<asio::const_buffer> buffers;
+    buffers.reserve(m_result.size());
+
+    if (false) {
+        std::memcpy(
+            buffers.data(),
+            m_result.data(),
+            m_result.size() * sizeof(asio::const_buffer)
+        );
+    } else {
+        for (const auto& sv : m_result) {
+            buffers.emplace_back(sv.data(), sv.size());
+        }
     }
 
-    auto cookies = detail::generateCookieHeaders(impl);
-    for(auto view : cookies){
-        m_result.push_back(view.toAsioBuffer());
+    return buffers;
+}
+
+void IHttpResponseRaw::prepareHeaders(IHttpRequestImpl& impl)
+{
+    // content-length and mime
+    setHeader(IHttpHeader::ContentLength, std::to_string(m_target.length()));
+    if(!m_target.empty()){
+        if(!m_headers.contain(IHttpHeader::ContentType) && !m_mime.isEmpty()){
+            m_headers.insert(IHttpHeader::ContentType, m_mime);
+        }
     }
 
-    m_result.push_back(IHttp::NEW_LINE.toAsioBuffer());
-    if(!content.empty()  && impl.m_reqRaw.m_method != IHttpMethod::HEAD){
-        m_result.push_back(content.toAsioBuffer());
+    // keep alive
+    if(impl.m_connection.m_keepAlive){
+        setHeader(IHttpHeader::Connection, "keep-alive");
+        setHeader(IHttpHeader::KeepAlive, "timeout=10, max=50");
     }
 }
 

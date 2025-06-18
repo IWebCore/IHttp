@@ -174,7 +174,7 @@ void IRequest::startWrite()
 
 std::vector<asio::const_buffer> IRequest::getOutput()
 {
-    return m_impl->m_respRaw.m_result;
+    return m_impl->m_respRaw.getResult();
 }
 
 IStringView IRequest::stash(const char *data) const

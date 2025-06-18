@@ -160,7 +160,7 @@ IHttpVersion IResponse::version() const
 
 IStringView IResponse::mime() const
 {
-    return m_impl.m_respRaw.m_mime.m_view;
+    return m_impl.m_respRaw.m_mime;
 }
 
 IHttpStatus IResponse::status() const
