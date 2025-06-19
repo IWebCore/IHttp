@@ -31,6 +31,9 @@ private:
 
 private:
     void createNumberFun();
+
+private:
+    static void setTextResponse(IHttpRequestImpl& impl, std::string&& text);   // 性能考虑
 };
 
 $PackageWebCoreEnd

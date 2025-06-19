@@ -119,7 +119,7 @@ void IHttpReturnTypeDetail::createStdStringFun()
                     return;
                 }
             }
-            impl.setResponseWare(IPlainTextResponse(std::move(value)));
+            setTextResponse(impl, std::string(value));
         };
     }
 }
@@ -138,7 +138,7 @@ void IHttpReturnTypeDetail::createQStringFun()
                     return;
                 }
             }
-            impl.setResponseWare(IPlainTextResponse(std::move(value)));
+            setTextResponse(impl, std::move(value));
         };
     }
 }
@@ -167,7 +167,7 @@ void IHttpReturnTypeDetail::createIStringFun()
                     return;
                 }
             }
-            impl.setResponseWare(IPlainTextResponse(std::move(value)));
+            setTextResponse(impl, std::move(value));
         };
     }
 }
@@ -305,6 +305,13 @@ void IHttpReturnTypeDetail::createNumberFun()
         };
         return;
     }
+}
+
+void IHttpReturnTypeDetail::setTextResponse(IHttpRequestImpl &impl, std::string &&text)
+{
+    impl.m_respRaw.setMime(IHttpMime::TEXT_PLAIN_UTF8);
+    impl.m_respRaw.setContent(new IHttpResponseContent(std::move(text)));
+
 }
 
 namespace ISpawnUtil

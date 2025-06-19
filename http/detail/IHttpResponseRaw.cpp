@@ -16,18 +16,38 @@ static const IString ServerHeader = "Server: IWebCore\r\n";
 
 namespace detail
 {
+
+IStringView generateStatusCode(int status)
+{
+    static std::once_flag flag;
+    static std::vector<IString> statusString;
+    std::call_once(flag, [](){
+        statusString.reserve(1025);
+        for(int i=0; i<1025; i++){
+            statusString.emplace_back(std::to_string(i));
+        }
+    });
+    return statusString[status].m_view;
+}
+
 void generateFirstLine(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 {
-    ret.push_back(IHttpVersionUtil::toString(impl.m_reqRaw.m_httpVersion));
-    ret.push_back(IHttp::SPACE);
-    ret.push_back(impl.stash(std::to_string(static_cast<int>(impl.m_respRaw.m_status))));
-    ret.push_back(IHttp::SPACE);
-    ret.push_back(IHttpStatusUtil::toStringDescription(impl.m_respRaw.m_status));
-    ret.push_back(IHttp::NEW_LINE);
+    ret.emplace_back(IHttpVersionUtil::toString(impl.m_reqRaw.m_httpVersion));
+    ret.emplace_back(IHttp::SPACE);
+    ret.emplace_back(generateStatusCode(static_cast<int>(impl.m_respRaw.m_status)));
+    ret.emplace_back(IHttp::SPACE);
+    ret.emplace_back(IHttpStatusUtil::toStringDescription(impl.m_respRaw.m_status));
+    ret.emplace_back(IHttp::NEW_LINE);
 }
 
 void generateCookieHeaders(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 {
+    const auto& cookies = impl.m_respRaw.m_cookies;
+    int size = 1 + 18* cookies.size() + ret.size();
+    if(ret.capacity() < size){
+        ret.reserve(size * 2);
+    }
+
     for(const auto& cookie : impl.m_respRaw.m_cookies){
         auto vals = cookie.toHeaderString();
         for(auto val : vals){
@@ -39,7 +59,10 @@ void generateCookieHeaders(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& imp
 void generateHeadersContent(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& m_raw)
 {
     auto& headers = m_raw.m_respRaw.m_headers;
-    ret.reserve(1 + 4* headers.m_header.size() + ret.size());
+    std::size_t size = (1 + 4* headers.m_header.size() + ret.size());
+    if(ret.capacity() < size){
+        ret.reserve(size * 2);
+    }
 
     ret.push_back(ServerHeader);
     for(const auto& pair : headers.m_header){
@@ -96,7 +119,7 @@ void IHttpResponseRaw::setHeader(IString key, IString value)
 
 void IHttpResponseRaw::setMime(IHttpMime mime)
 {
-    this->m_mime = IHttpMimeUtil::toString(mime);
+    this->m_mime = &IHttpMimeUtil::toString(mime);
 }
 
 void IHttpResponseRaw::setContent(const IHttpInvalidWare& ware)
@@ -176,6 +199,7 @@ void IHttpResponseRaw::prepareResult(IHttpRequestImpl& impl)
 
     prepareHeaders(impl);
 
+    m_result.reserve(1024);
     detail::generateFirstLine(m_result, impl);               // first line
     detail::generateHeadersContent(m_result, impl);     // headers
     detail::generateCookieHeaders(m_result, impl);      // cookies
@@ -209,17 +233,17 @@ std::vector<asio::const_buffer> IHttpResponseRaw::getResult()
 void IHttpResponseRaw::prepareHeaders(IHttpRequestImpl& impl)
 {
     // content-length and mime
-    setHeader(IHttpHeader::ContentLength, std::to_string(m_target.length()));
+    setHeader(&IHttpHeader::ContentLength, std::to_string(m_target.length()));
     if(!m_target.empty()){
-        if(!m_headers.contain(IHttpHeader::ContentType) && !m_mime.isEmpty()){
-            m_headers.insert(IHttpHeader::ContentType, m_mime);
+        if(!m_headers.contain(&IHttpHeader::ContentType) && !m_mime.isEmpty()){
+            m_headers.insert(&IHttpHeader::ContentType, &m_mime);
         }
     }
 
     // keep alive
     if(impl.m_connection.m_keepAlive){
-        setHeader(IHttpHeader::Connection, "keep-alive");
-        setHeader(IHttpHeader::KeepAlive, "timeout=10, max=50");
+        setHeader(&IHttpHeader::Connection, &IStringView("keep-alive"));
+        setHeader(&IHttpHeader::KeepAlive, &IStringView("timeout=10, max=50"));
     }
 }
 
