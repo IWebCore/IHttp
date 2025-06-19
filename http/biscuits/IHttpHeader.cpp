@@ -32,7 +32,7 @@ IStringView IHttpHeader::value(const IString& key) const
     return IHttp::EMPTY;
 }
 
-bool IHttpHeader::contain(const IString& key) const
+bool IHttpHeader::contain(IStringView key) const
 {
     return m_header.find(key) != m_header.end();
 }

@@ -11,7 +11,7 @@ public:
     void remove(const IString& key);
     IStringViewList keys() const;
     IStringView value(const IString& key) const;
-    bool contain(const IString& key) const;
+    bool contain(IStringView key) const;
     bool isEmpty() const;
 
 public:

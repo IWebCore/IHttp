@@ -1,7 +1,6 @@
 ﻿#include "IRequest.h"
 
 #include "core/abort/IGlobalAbort.h"
-//#include "core/unit/IObjectMemoryPoolUnit.h"
 #include "http/IHttpConstant.h"
 #include "http/detail/IHttpRequestImpl.h"
 #include "http/IHttpCookieJar.h"
@@ -11,22 +10,15 @@
 
 $PackageWebCoreBegin
 
-//namespace detail
-//{
-//    static IObjectMemoryPoolUnit<IHttpRequestImpl> s_pool;
-//}
-
 IRequest::IRequest(ITcpConnection& connection, int resolverFactoryId)
     : ITcpResolver(connection, resolverFactoryId)
 {
-//    m_impl = detail::s_pool.allocate(*this);
     m_impl = new IHttpRequestImpl(*this);
 }
 
 IRequest::~IRequest()
 {
     IHttpManage::instance().invokeFilters<IHttpFilterWare::Type::completion>(*this);
-//    detail::s_pool.deallocate(m_impl);
     delete m_impl;
 }
 

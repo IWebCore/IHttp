@@ -44,7 +44,7 @@ void detail::fileResponseProcessor(const IHttpResponseContent &content, IHttpRes
             && content.m_attribute->contains(IHttpFileResponseContent::ContentDispoistion)
             && (content.m_attribute->operator [](IHttpFileResponseContent::ContentDispoistion)) == IHttp::TRUE_STR)
     {
-        raw.m_headers.insert(IHttpHeader::ContentDisposition, detail::createDispoisition(content.m_content));
+        raw.m_headers.insert(&IHttpHeader::ContentDisposition, detail::createDispoisition(content.m_content));
     }
 
     if(false || !content.m_attribute
@@ -53,7 +53,7 @@ void detail::fileResponseProcessor(const IHttpResponseContent &content, IHttpRes
     {
         auto mime = detail::findMime(content.m_content);
         if(mime != IHttpMimeUtil::MIME_UNKNOWN_STRING){
-            raw.m_headers.insert(IHttpHeader::ContentType, mime);
+            raw.m_headers.insert(&IHttpHeader::ContentType, mime);
         }
     }
 }

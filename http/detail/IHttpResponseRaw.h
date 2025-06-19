@@ -53,7 +53,7 @@ public:
     IString m_mime;
     IHttpStatus m_status {IHttpStatus::OK_200};
     IHttpHeader m_headers;
-    IStringView m_target;   // 将要写入的内容
+    IStringView m_target;
     std::list<IHttpCookiePart> m_cookies;
     std::list<IHttpResponseContent*> m_contents;
     RetType m_result;

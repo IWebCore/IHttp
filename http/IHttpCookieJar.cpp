@@ -1,8 +1,5 @@
 ﻿#include "IHttpCookieJar.h"
-#include "core/abort/IGlobalAbort.h"
 #include "http/detail/IHttpRequestImpl.h"
-#include "http/detail/IHttpRequestRaw.h"
-#include "http/detail/IHttpResponseRaw.h"
 
 $PackageWebCoreBegin
 

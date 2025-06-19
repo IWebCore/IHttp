@@ -4,7 +4,6 @@
 #include "http/biscuits/IHttpHeader.h"
 #include "http/IRequest.h"
 #include "http/detail/IHttpRequestImpl.h"
-#include "http/detail/IHttpResponseRaw.h"
 #include "http/detail/IHttpRequestRaw.h"
 #include "http/IHttpHeaderJar.h"
 #include "http/response/IHttpResponseWare.h"

@@ -200,7 +200,7 @@ void IHttpResponseRaw::prepareResult(IHttpRequestImpl& impl)
     prepareHeaders(impl);
 
     m_result.reserve(1024);
-    detail::generateFirstLine(m_result, impl);               // first line
+    detail::generateFirstLine(m_result, impl);          // first line
     detail::generateHeadersContent(m_result, impl);     // headers
     detail::generateCookieHeaders(m_result, impl);      // cookies
     m_result.push_back(IHttp::NEW_LINE);
@@ -235,15 +235,17 @@ void IHttpResponseRaw::prepareHeaders(IHttpRequestImpl& impl)
     // content-length and mime
     setHeader(&IHttpHeader::ContentLength, std::to_string(m_target.length()));
     if(!m_target.empty()){
-        if(!m_headers.contain(&IHttpHeader::ContentType) && !m_mime.isEmpty()){
+        if(!m_headers.contain(IHttpHeader::ContentType) && !m_mime.isEmpty()){
             m_headers.insert(&IHttpHeader::ContentType, &m_mime);
         }
     }
 
     // keep alive
     if(impl.m_connection.m_keepAlive){
-        setHeader(&IHttpHeader::Connection, &IStringView("keep-alive"));
-        setHeader(&IHttpHeader::KeepAlive, &IStringView("timeout=10, max=50"));
+        IString hello(&"hello");
+        IString world("world");
+        setHeader(&IHttpHeader::Connection, &"keep-alive");
+        setHeader(&IHttpHeader::KeepAlive, &"timeout=10, max=50");
     }
 }
 

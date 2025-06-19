@@ -39,6 +39,7 @@ private:
 public:
     IHttpRequestImpl(IRequest& self);
     ~IHttpRequestImpl();
+    void reset(IRequest& self);
 
 private:
     void parseData();
