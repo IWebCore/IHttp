@@ -4,10 +4,7 @@
 
 #define $AsController(path)                                                                       \
     Q_CLASSINFO(PP_STRING(IHttpControllerMapping$), #path)                                        \
-public:                                                                                           \
-    virtual IGadgetUnit::StaticMetacallFunction staticMetaCallFunction() const final{             \
-        return qt_static_metacall;                                                                \
-    }                                                                                             \
+    PP_GADGET_STATIC_META_OBJECT_FUNC                                                             \
 private:
 
 #define PP_CONTROLLER_CALLABLE_MAPPING(name, type, index)    \
