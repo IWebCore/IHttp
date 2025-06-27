@@ -93,6 +93,11 @@ void IHttpResponseWare::setCookie(const IString &key, const IString &value)
     m_raw->setCookie(key, value);
 }
 
+void IHttpResponseWare::setCookie(const IString &key, const IString &value, int maxAge)
+{
+    m_raw->setCookie(key, value, maxAge);
+}
+
 void IHttpResponseWare::setContent(IString &&value)
 {
     m_raw->setContent(new IHttpResponseContent(std::move(value)));

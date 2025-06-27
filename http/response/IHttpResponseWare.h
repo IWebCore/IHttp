@@ -35,6 +35,7 @@ public:
     void setCookie(IHttpCookiePart&&);
     void setCookie(const IHttpCookiePart&);
     void setCookie(const IString& key, const IString& value);
+    void setCookie(const IString& key, const IString& value, int maxAge);
 
     void setContent(IString&& value);
     void setContent(const IString& value);

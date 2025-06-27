@@ -187,6 +187,12 @@ void IHttpResponseRaw::setCookie(const IString &key, const IString &value)
     m_cookies.emplace_back(key, value);
 }
 
+void IHttpResponseRaw::setCookie(const IString &key, const IString &value, int maxAge)
+{
+    IHttpCookiePart cookie(key, value, maxAge);
+    m_cookies.emplace_back(std::move(cookie));
+}
+
 void IHttpResponseRaw::prepareResult(IHttpRequestImpl& impl)
 {
     while(!m_contents.empty() && m_contents.back()->m_processor){

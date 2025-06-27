@@ -41,7 +41,7 @@ public:
     IString m_key;
     IString m_value;
     IString m_domain;
-    IString m_path;
+    IString m_path{"/"};    // default to /
 
     QDateTime m_expires {};
     int m_maxAge {std::numeric_limits<int>::min()};

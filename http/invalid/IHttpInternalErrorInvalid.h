@@ -9,6 +9,8 @@ class IHttpInternalErrorInvalid : public IHttpInvalidInterface<IHttpInternalErro
 {
 public:
     IHttpInternalErrorInvalid();
+    IHttpInternalErrorInvalid(const char* description);
+    IHttpInternalErrorInvalid(const QString& description);
     IHttpInternalErrorInvalid(const std::string& description);
 };
 

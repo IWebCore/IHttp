@@ -1015,7 +1015,7 @@ void IHttpArgumentTypeDetail::createJsonType()
             }
             auto ptr = detail::fromIJsonToPtr(json[pointer], self.m_typeId, self.m_typeName);
             if(!ptr){
-                request.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                request.setInvalid(IHttpBadRequestInvalid("json field value not proper"));
             }
             return ptr;
         }
@@ -1099,7 +1099,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 const auto& value = req.multiPartJar().getMultiPart(self.m_name).m_content;
                 auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("multipart field value not proper"));
                 }
                 return ptr;
             }
@@ -1115,7 +1115,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 auto value = req.queryParameters().value(self.m_name);
                 auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("query field value not proper"));
                 }
                 return ptr;
             }
@@ -1124,7 +1124,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 auto value =  req.pathParameters().value(self.m_name);
                 auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("path field value not proper"));
                 }
                 return ptr;
             }
@@ -1133,7 +1133,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 auto value = req.cookieJar().getRequestCookie(self.m_name).m_value;
                 auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("cookie field value not proper"));
                 }
                 return ptr;
             }
@@ -1142,7 +1142,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 auto value = req.session().getValue(self.m_name.toQString());
                 auto ptr = detail::fromQVariantToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("session field value not proper"));
                 }
                 return ptr;
             }
@@ -1151,7 +1151,7 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
                 auto value = req.headerJar().getRequestHeaderValue(self.m_name);
                 auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
                 if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
+                    req.setInvalid(IHttpBadRequestInvalid("header field value not proper"));
                 }
                 return ptr;
             }

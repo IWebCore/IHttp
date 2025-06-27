@@ -1,4 +1,5 @@
 ﻿#include "IHttpControllerAction.h"
+#include <core/base/IException.h>
 #include "http/IRequest.h"
 #include "http/IResponse.h"
 #include "http/detail/IHttpResponseRaw.h"
@@ -15,9 +16,13 @@ void IHttpControllerAction::invoke(IRequest &request) const
     if(request.isValid()){
         auto index = m_callable.m_metaMethod.methodIndex();
         auto obj = static_cast<QObject*>(m_callable.m_handler);
-        m_callable.m_metaCall(obj, QMetaObject::InvokeMetaMethod, index, params.data());
-        if(request.isValid()){
-            m_callable.m_returnNode.m_resolveFunction(request.impl(), params[0]);
+        try{
+            m_callable.m_metaCall(obj, QMetaObject::InvokeMetaMethod, index, params.data());
+            if(request.isValid()){
+                m_callable.m_returnNode.m_resolveFunction(request.impl(), params[0]);
+            }
+        }catch(const IException& e){
+            request.setInvalid(IHttpInternalErrorInvalid(e.getCause()));
         }
     }
     destroyParams(params);
