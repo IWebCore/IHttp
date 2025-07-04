@@ -862,18 +862,22 @@ void IHttpArgumentTypeDetail::createSessionType()
 
     auto self = *this;
     this->m_createFun = [=](IRequest& req) -> void*{
-        auto value = req.session().getValue(self.m_name.toQString());
-        if(value.isValid()){
-            auto ptr = detail::fromQVariantToPtr(value, self.m_typeId, self.m_typeName);
-            if(!ptr){
-                req.setInvalid(IHttpBadRequestInvalid("session field value not proper"));
+        if(req.isSessionExist()){
+            auto value = req.session().getValue(self.m_name.toQString());
+            if(value.isValid()){
+                auto ptr = detail::fromQVariantToPtr(value, self.m_typeId, self.m_typeName);
+                if(!ptr){
+                    req.setInvalid(IHttpBadRequestInvalid("session field value not proper"));
+                }
+                return ptr;
             }
-            return ptr;
         }
+
         if(self.m_optional){
             return self.m_optionalPtr;
         }
-        req.setInvalid(IHttpInternalErrorInvalid("session not found"));
+
+        req.setInvalid(IHttpInternalErrorInvalid("session field not found. field:" + m_name));
         return nullptr;
     };
 

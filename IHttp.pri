@@ -27,12 +27,6 @@ HEADERS += \
     $$PWD/http/action/IHttpOptionsMethodAction.h \
     $$PWD/http/action/IHttpOptionsMethodHandlerInterface.h \
     $$PWD/http/action/IHttpOptionsMethodHandlerWare.h \
-    $$PWD/http/assets/IHttpAssetsAction.h \
-    $$PWD/http/assets/IHttpAssetsActionMapping.h \
-    $$PWD/http/assets/IHttpAssetsAnnomacro.h \
-    $$PWD/http/assets/IHttpAssetsInterface.h \
-    $$PWD/http/assets/IHttpAssetsWare.h \
-    $$PWD/http/assets/IHttpDefaultAssets.h \
     $$PWD/http/biscuits/IHttpAttribute.h \
     $$PWD/http/biscuits/IHttpHeader.h \
     $$PWD/http/biscuits/IHttpMethod.h \
@@ -57,8 +51,6 @@ HEADERS += \
     $$PWD/http/controller/pp/IPatchMappingPreProcessor.h \
     $$PWD/http/controller/pp/IPostMappingPreProcessor.h \
     $$PWD/http/controller/pp/IPutMappingPreProcessor.h \
-    $$PWD/http/cors/IHttpCorsFilter.h \
-    $$PWD/http/cors/IHttpCorsPreprocessor.h \
     $$PWD/http/detail/IHttpChunkedFlow.h \
     $$PWD/http/detail/IHttpRequestImpl.h \
     $$PWD/http/detail/IHttpRequestRaw.h \
@@ -104,13 +96,10 @@ HEADERS += \
     $$PWD/http/response/content/IHttpFileResponseContent.h \
     $$PWD/http/response/content/IHttpInvalidReponseContent.h \
     $$PWD/http/response/content/IHttpResponseContent.h \
+    $$PWD/http/session/IHttpSessionAnnomacro.h \
     $$PWD/http/session/IHttpSessionInterface.h \
     $$PWD/http/session/IHttpSessionManager.h \
-    $$PWD/http/session/IHttpSessionWare.h \
-    $$PWD/http/session/default/IHttpCachedSession.h \
-    $$PWD/http/session/default/IHttpCachedSessionData.h \
-    $$PWD/http/session/default/IHttpSessionCreateFilter.h \
-    $$PWD/http/session/default/IHttpSessionDumpFilter.h
+    $$PWD/http/session/IHttpSessionWare.h
 
 SOURCES += \
     $$PWD/http/IHttpCookieJar.cpp \
@@ -129,9 +118,6 @@ SOURCES += \
     $$PWD/http/action/IHttpInvalidRequestAction.cpp \
     $$PWD/http/action/IHttpNotFoundAction.cpp \
     $$PWD/http/action/IHttpOptionsMethodAction.cpp \
-    $$PWD/http/assets/IHttpAssetsAction.cpp \
-    $$PWD/http/assets/IHttpAssetsActionMapping.cpp \
-    $$PWD/http/assets/IHttpDefaultAssets.cpp \
     $$PWD/http/biscuits/IHttpHeader.cpp \
     $$PWD/http/biscuits/IHttpMethod.cpp \
     $$PWD/http/biscuits/IHttpMime.cpp \
@@ -145,7 +131,6 @@ SOURCES += \
     $$PWD/http/controller/IHttpControllerActionMapping.cpp \
     $$PWD/http/controller/IHttpControllerNode.cpp \
     $$PWD/http/controller/detail/IHttpControllerCallableInfo.cpp \
-    $$PWD/http/cors/IHttpCorsFilter.cpp \
     $$PWD/http/detail/IHttpRequestImpl.cpp \
     $$PWD/http/detail/IHttpResponseHeader.cpp \
     $$PWD/http/detail/IHttpResponseRaw.cpp \
@@ -176,11 +161,7 @@ SOURCES += \
     $$PWD/http/response/content/IHttpInvalidReponseContent.cpp \
     $$PWD/http/response/content/IHttpResponseContent.cpp \
     $$PWD/http/session/IHttpSessionManager.cpp \
-    $$PWD/http/session/IHttpSessionWare.cpp \
-    $$PWD/http/session/default/IHttpCachedSession.cpp \
-    $$PWD/http/session/default/IHttpCachedSessionData.cpp \
-    $$PWD/http/session/default/IHttpSessionCreateFilter.cpp \
-    $$PWD/http/session/default/IHttpSessionDumpFilter.cpp
+    $$PWD/http/session/IHttpSessionWare.cpp
 
 RESOURCES += \
     $$PWD/http/webresource.qrc

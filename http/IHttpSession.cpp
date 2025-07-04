@@ -1,6 +1,8 @@
 ﻿#include "IHttpSession.h"
 #include "core/abort/IGlobalAbort.h"
 #include "http/IRequest.h"
+#include "http/biscuits/IHttpHeader.h"
+#include "http/IHttpConstant.h"
 #include "http/session/IHttpSessionManager.h"
 #include "http/session/IHttpSessionInterface.h"
 #include "http/detail/IHttpRequestRaw.h"
@@ -20,7 +22,18 @@ IHttpSession::IHttpSession(IHttpRequestImpl& request)
         return;
     }
 
+    m_isNewSession = true;
     m_sessionId = m_sessionWare.createNewId();
+}
+
+bool IHttpSession::isSessionExist(const IRequest &request)
+{
+    auto value = request.impl().m_reqRaw.m_cookies.value(IHttp::SESSION_HEADER, {});
+    if(value.length() == 0){
+        return false;
+    }
+    auto& ware = IHttpSessionManager::instance().getSessionWare();
+    return ware.tryLockId(value.toQString());
 }
 
 const QString &IHttpSession::getId() const
@@ -28,8 +41,14 @@ const QString &IHttpSession::getId() const
     return m_sessionId;
 }
 
+bool IHttpSession::isNewSession() const
+{
+    return m_isNewSession;
+}
+
 void IHttpSession::invalidate()
 {
+    m_isInvalidated = true;
     return m_sessionWare.invalidate(m_sessionId);
 }
 
@@ -55,7 +74,7 @@ bool IHttpSession::contains(const QString &key) const
 
 IHttpCookiePart IHttpSession::toCookie() const
 {
-    return m_sessionWare.toCookie(m_sessionId);
+    return m_sessionWare.toCookie(m_sessionId, m_isInvalidated);
 }
 
 $PackageWebCoreEnd

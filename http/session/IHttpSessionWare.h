@@ -24,7 +24,7 @@ public:
 
     virtual void invalidate(const QString& id) = 0;
 
-    virtual IHttpCookiePart toCookie(const QString& id) const;
+    virtual IHttpCookiePart toCookie(const QString& id, bool isInvalidate=false) const;
 
 public:
     virtual void startTimer() = 0;

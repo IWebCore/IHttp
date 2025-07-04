@@ -694,7 +694,7 @@ void IHttpRequestImpl::setResponseWare(const IHttpResponseWare &ware)
 
 bool IHttpRequestImpl::isSessionExist() const
 {
-    return m_session != nullptr;
+    return IHttpSession::isSessionExist(m_request);
 }
 
 IHttpSession &IHttpRequestImpl::session()

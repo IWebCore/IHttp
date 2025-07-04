@@ -119,7 +119,7 @@ void IHttpResponseRaw::setHeader(IString key, IString value)
 
 void IHttpResponseRaw::setMime(IHttpMime mime)
 {
-    this->m_mime = &IHttpMimeUtil::toString(mime);
+    this->m_mime = IHttpMimeUtil::toString(mime);
 }
 
 void IHttpResponseRaw::setContent(const IHttpInvalidWare& ware)

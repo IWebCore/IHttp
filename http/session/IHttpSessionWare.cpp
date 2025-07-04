@@ -13,14 +13,18 @@ QString IHttpSessionWare::resolveSessionId(const IHttpRequestRaw & raw) const
     return {};
 }
 
-IHttpCookiePart IHttpSessionWare::toCookie(const QString& id) const
+IHttpCookiePart IHttpSessionWare::toCookie(const QString& id, bool isInvalidate) const
 {
     static const $Int SESSION_TIME{"/http/session/expiredTime", 30 * 60};
     static const $Bool httpOnly{"/http/session/cookie/httpOnly", false};
     static const $Bool secure{"/http/session/cookie/secure", false};
-    static const $QString path{"/http/session/cookie/path", ""};
+    static const $QString path{"/http/session/cookie/path", "/"};
 
     IHttpCookiePart cookie (IHttp::SESSION_HEADER, IString(id), std::chrono::seconds(*SESSION_TIME), *secure, *httpOnly);
+
+    if(isInvalidate){
+        cookie.setMaxAge(0);
+    }
     if(!(*path).isEmpty()){
         cookie.setPath(IString(*path));
     }

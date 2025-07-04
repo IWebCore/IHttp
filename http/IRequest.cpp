@@ -44,7 +44,7 @@ IStringView IRequest::operator[](const QString &header) const
 
 bool IRequest::isSessionExist() const
 {
-    return m_impl->isSessionExist();
+    return m_impl->m_session || m_impl->isSessionExist();
 }
 
 const IHttpCookieJar& IRequest::cookieJar() const

@@ -1,4 +1,103 @@
-loadToIncludes(${CMAKE_CURRENT_LIST_DIR})
+﻿loadToIncludes(${CMAKE_CURRENT_LIST_DIR})
+
+loadToHeaders(
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpAbort.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpAnnomacro.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpConstant.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookieJar.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookiePart.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpHeaderJar.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpJarUnit.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpManage.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpMultiPart.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpMultiPartJar.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpServer.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpSession.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IHttpTaskCatagory.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IRequest.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/IResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpActionInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpActionMappingInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpActionMappingWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpActionWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpBadRequestAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpInternalErrorAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpInvalidRequestAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpNotFoundAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpOptionsMethodAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpOptionsMethodHandlerInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/action/IHttpOptionsMethodHandlerWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpAttribute.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpHeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpMethod.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpMime.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpRegistMimeInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpStatus.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/biscuits/IHttpVersion.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/IHttpArgumentType.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/IHttpCallable.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/IHttpReturnType.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/detail/IHttpArgumentTypeDetail.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/callable/detail/IHttpReturnTypeDetail.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerAbort.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerAction.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerActionMapping.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerNode.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/detail/IHttpControllerCallableInfo.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IControllerPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IDeleteMappingPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IGetMappingPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IPatchMappingPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IPostMappingPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/controller/pp/IPutMappingPreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpChunkedFlow.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpRequestImpl.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpRequestRaw.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpResponseHeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpResponseRaw.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpDefaultProfileTask.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpPrintTraceTask.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpResolverFactory.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpBodyFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpCompletionFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpFilterWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpFirstLineFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpHeaderFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpPostHandleFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/filter/IHttpPreHandleFilterInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpBadRequestInvalid.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInternalErrorInvalid.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidHandlerInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidHandlerWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpNotFoundInvalid.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPath.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPathFragment.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPathValidatorInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathFragmentDetail.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathValidatorsTask.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IBytesResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IFileResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHtmlResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseInterface_redirectResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseInterface_statusResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseManage.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponsePreProcessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseUnit.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IHttpResponseWare.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IJsonResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/IPlainTextResponse.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpFileResponseContent.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpInvalidReponseContent.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpResponseContent.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionInterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionManager.h
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionWare.h
+)
 
 loadToSources(
     ${CMAKE_CURRENT_LIST_DIR}/http/IHttpCookieJar.cpp 
@@ -31,18 +130,20 @@ loadToSources(
     ${CMAKE_CURRENT_LIST_DIR}/http/controller/IHttpControllerNode.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/controller/detail/IHttpControllerCallableInfo.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpRequestImpl.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpResponseHeader.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/detail/IHttpResponseRaw.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/detail/IResponseHeader.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpDefaultProfileTask.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpFileServiceTask.cpp 
+#    ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpFileServiceTask.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpPrintTraceTask.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/detail/task/IHttpResolverFactory.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpBadRequestInvalid.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInternalErrorInvalid.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidHandlerWare.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpInvalidWare.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/invalid/IHttpNotFoundInvalid.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPath.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/path/IHttpPathFragment.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathDetail.cpp 
+#    ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathDetail.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathFragmentDetail.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/path/detail/IHttpPathValidatorsTask.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/response/IBytesResponse.cpp 
@@ -58,12 +159,9 @@ loadToSources(
     ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpInvalidReponseContent.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/response/content/IHttpResponseContent.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionManager.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionWare.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpCachedSession.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpCachedSessionData.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpSessionCreateFilter.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/http/session/default/IHttpSessionDumpFilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/http/session/IHttpSessionWare.cpp
 )
+
 
 loadToResources(
     ${CMAKE_CURRENT_LIST_DIR}/http/webresource.qrc

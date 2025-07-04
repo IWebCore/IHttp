@@ -15,7 +15,11 @@ public:
     IHttpSession(IHttpRequestImpl& m_impl);
 
 public:
+    static bool isSessionExist(const IRequest& request);
+
+public:
     const QString& getId() const;
+    bool isNewSession() const;
 
     void remove(const QString& key);
     QVariant getValue(const QString& key, const QVariant& variant = {}) const;
@@ -27,8 +31,10 @@ public:
     void invalidate();
 
 private:
-    IHttpSessionWare& m_sessionWare;
+    bool m_isInvalidated{false};
+    bool m_isNewSession{false};
     QString m_sessionId{};
+    IHttpSessionWare& m_sessionWare;
 };
 
 $PackageWebCoreEnd

@@ -9,7 +9,10 @@ class IHttpBadRequestInvalid : public IHttpInvalidInterface<IHttpBadRequestInval
 {
 public:
     IHttpBadRequestInvalid();
+    IHttpBadRequestInvalid(const char* description);
+    IHttpBadRequestInvalid(const QString& description);
     IHttpBadRequestInvalid(const std::string& description);
+    IHttpBadRequestInvalid(const IString& description);
 };
 
 $PackageWebCoreEnd
