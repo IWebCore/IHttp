@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "core/unit/ISoloUnit.h"
+#include "http/IRequest.h"
 #include "http/biscuits/IHttpStatus.h"
 #include "http/filter/IHttpFilterWare.h"
 

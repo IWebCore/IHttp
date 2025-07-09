@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "core/util/IPreProcessorUtil.h"
-#include "core/config/IConfigPreProcessor.h".h"
+#include "core/config/IConfigPreProcessor.h"
 
 #define $SetHttpSessionEnabled(boolValue)   \
     PP_PROFILE_CONFIG(SetHttpSessionEnabledKlass, /http/session/enabled, boolValue)

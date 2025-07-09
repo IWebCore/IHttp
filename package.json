@@ -4,9 +4,11 @@
     "version":"1.0.0",
     "author": "yuekeyuan",
     "license":"AGPL-3.0-only",
-    "summary":"http mvc server framework",
+    "summary":"http mvc server framework by annotation",
+    "keywords": ["http", "mvc", "server", "framework", "IWebCore", "yuekeyuan", "annotation"],
     "dependencies": {
         "ITcp": "*",
         "ICore": "*"
-    }
+    },
+    "changelog":"init project"
 }

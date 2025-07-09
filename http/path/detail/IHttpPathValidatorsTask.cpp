@@ -1,5 +1,6 @@
 ﻿#include "IHttpPathValidatorsTask.h"
 #include "http/IHttpManage.h"
+#include "http/IRequest.h"
 #include "http/path/IHttpPathFragment.h"
 #if __has_include(<charconv>)
     #include <charconv>
