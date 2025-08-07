@@ -112,6 +112,7 @@ private:
     State m_state{State::FirstLineState};
     IStringView m_multipartBoundary;
     IStringView m_multipartBoundaryEnd;
+    IStringView m_remoteIp;
 
 private:
     IHttpChunkedFlow* m_chunkFlow{};

@@ -44,9 +44,11 @@ public:
 
 public:
     IStringView url() const;
+    IStringView ip() const;
     IHttpVersion version() const;
     IHttpMime mime() const;
     IHttpMethod method() const;
+
 
     std::size_t contentLength() const;
     IStringView contentType() const;

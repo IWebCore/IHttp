@@ -77,6 +77,14 @@ IStringView IRequest::url() const
     return m_impl->m_reqRaw.m_url;
 }
 
+IStringView IRequest::ip() const
+{
+    if(!m_impl->m_remoteIp.length()){
+        m_impl->m_remoteIp = stash(m_connection.remoteIp());
+    }
+    return m_impl->m_remoteIp;
+}
+
 IHttpVersion IRequest::version() const
 {
     return m_impl->m_reqRaw.m_httpVersion;

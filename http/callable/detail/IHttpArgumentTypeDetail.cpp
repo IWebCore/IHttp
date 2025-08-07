@@ -877,7 +877,7 @@ void IHttpArgumentTypeDetail::createSessionType()
             return self.m_optionalPtr;
         }
 
-        req.setInvalid(IHttpInternalErrorInvalid("session field not found. field:" + m_name));
+        req.setInvalid(IHttpInternalErrorInvalid("session field not found"));
         return nullptr;
     };
 
