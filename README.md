@@ -9,30 +9,30 @@ IHttpCore 又可以称为  IHttp, 他是一个基于反射和宏注解的Http框
 
 IHttp 目前支持在 CMake 项目和Qt 项目上使用。我们以 Qt 为例。默认创建一个Qt console 项目。如下。项目的内容如下:
 
-=== "server.pro"
-    ```pro
-    QT -= gui
+> server.pro
+```pro
+QT -= gui
 
-    CONFIG += c++11 console
-    CONFIG -= app_bundle
-    
-    DEFINES += QT_DEPRECATED_WARNINGS
-    
-    SOURCES += \
-            main.cpp
-    ```
+CONFIG += c++11 console
+CONFIG -= app_bundle
 
-=== "main.cpp"
-    ```cpp
-    #include <QCoreApplication>
+DEFINES += QT_DEPRECATED_WARNINGS
 
-    int main(int argc, char *argv[])
-    {
-        QCoreApplication a(argc, argv);
-    
-        return a.exec();
-    }
-    ```
+SOURCES += \
+        main.cpp
+```
+
+> main.cpp
+```cpp
+#include <QCoreApplication>
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    return a.exec();
+}
+```
 
 这里面 server.pro 中的内容我做了一些删减。
 
@@ -59,75 +59,76 @@ qmake 是用来刷新这个项目，如果用户在命令行中执行 qmake 失�
 
 在上述命令执行后，整个项目内容如下：
 
-=== "server.pro"
-    ```pro
-    QT -= gui
+> server.pro
+```pro
+QT -= gui
 
-    CONFIG += c++11 console
-    CONFIG -= app_bundle
-    
-    DEFINES += QT_DEPRECATED_WARNINGS
-    
-    SOURCES += \
-            main.cpp
-    
-    include($$(IQMakeCore))
-    IQMakeCoreInit()
-    include($$PWD/.package.pri)
-    ```
+CONFIG += c++11 console
+CONFIG -= app_bundle
 
-=== "main.cpp"
-    ```cpp
-    #include <QCoreApplication>
+DEFINES += QT_DEPRECATED_WARNINGS
 
-    int main(int argc, char *argv[])
-    {
-        QCoreApplication a(argc, argv);
-    
-        return a.exec();
+SOURCES += \
+        main.cpp
+
+include($$(IQMakeCore))
+IQMakeCoreInit()
+include($$PWD/.package.pri)
+```
+
+> main.cpp
+```cpp
+#include <QCoreApplication>
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    return a.exec();
+}
+```
+
+> packages.json
+```json
+{
+    "packages":{
+        
     }
-    ```
-
-=== "packages.json"
-    ```json
-    {
-        "packages":{
-            
-        }
-    }
-    ```
+}
+```
 
 此时我们的项目变化就是 在 `server.pro` 文件中，多了三行IMakeCore支持的代码。还有是多以一个 `packages.json` 文件。
 
 如果用户使用 QtCreator, 它的项目面板的变化如下：
 
-=== "集成IMakeCore之前"
-	![集成IMakeCore前的项目面板](assets/image-20250715165313691.png)
+> 集成IMakeCore之前
 
-=== "集成IMakeCore之后"
-	![集成IMakeCore之后的项目面板](assets/image-20250715165434705.png)
+![集成IMakeCore前的项目面板](./assets/image-20250715165313691.png)
+
+> 集成IMakeCore之后
+
+![集成IMakeCore之后的项目面板](./assets/image-20250715165434705.png)
 
 ### 第三步：添加包
 
 修改 `packages.json` 文件如下：
 
-=== "packages.json"
-    ```json
-    {
-        "packages":{
-            "asio" : "*",
-            "nlohmann.json":"*",
-            "ICore": "1.0.0",
-            "ITcp" : "1.0.0",
-            "IHttp" : "1.0.0"
-        }
+> packages.json
+```json
+{
+    "packages":{
+        "asio" : "*",
+        "nlohmann.json":"*",
+        "ICore": "1.0.0",
+        "ITcp" : "1.0.0",
+        "IHttp" : "1.0.0"
     }
-    ```
+}
+```
 
 执行qmake, 项目面板变化如下：
 
-=== "项目面板"
-    ![项目面板](assets/image-20250715170932760.png)
+![项目面板](assets/image-20250715170932760.png)
 
 此时IHttp相关的包已经集成进来了。这里之所以导入了5个包，是因为`IHttp` 依赖于 `ITcp` 和 `ICore`包, 而 `ICore` 依赖于 `asio` 和 `nlohmann.json`包。如果不一同导入进来，IMakeCore 解析包依赖时会报错。
 
@@ -141,78 +142,78 @@ qmake 是用来刷新这个项目，如果用户在命令行中执行 qmake 失�
 
 修改main.cpp 文件，添加一个服务器代码如下：
 
-=== "main.cpp"
+> main.cpp
 
-    ```cpp
-    #include "core/application/IApplication.h"
-    #include "http/IHttpServer.h"
-    
-    int main(int argc, char *argv[])
-    {
-        IApplication app(argc, argv);
-    
-        IHttpServer server;
-        server.listen();
-    
-        return app.run();
-    }
-    ```
+```cpp
+#include "core/application/IApplication.h"
+#include "http/IHttpServer.h"
+
+int main(int argc, char *argv[])
+{
+    IApplication app(argc, argv);
+
+    IHttpServer server;
+    server.listen();
+
+    return app.run();
+}
+```
 
 此时，一个服务器就开好了，执行以下程序，输出如下：
 
-=== "console 输出"
+> console 输出
 
-    ```txt
-    _____  _    _        _      _____
-    |_   _|| |  | |      | |    /  __ \
-    | |  | |  | |  ___ | |__  | /  \/  ___   _ __  ___
-    | |  | |/\| | / _ \| '_ \ | |     / _ \ | '__|/ _ \
-    _| |_ \  /\  /|  __/| |_) || \__/\| (_) || |  |  __/
-    \___/  \/  \/  \___||_.__/  \____/ \___/ |_|   \___|
-    
-    server started, listen at  "127.0.0.1:8550"
-    ```
+```txt
+_____  _    _        _      _____
+|_   _|| |  | |      | |    /  __ \
+| |  | |  | |  ___ | |__  | /  \/  ___   _ __  ___
+| |  | |/\| | / _ \| '_ \ | |     / _ \ | '__|/ _ \
+_| |_ \  /\  /|  __/| |_) || \__/\| (_) || |  |  __/
+\___/  \/  \/  \___||_.__/  \____/ \___/ |_|   \___|
+
+server started, listen at  "127.0.0.1:8550"
+```
 
 我们在浏览器上输入 `127.0.0.1:8550`，其结果如下：
 
-=== "浏览器结果"
+> 浏览器结果
 
-    ![浏览器返回结果](assets/image-20250715172850506.png)
+![浏览器返回结果](assets/image-20250715172850506.png)
 
-=== "浏览器发送的请求"
+> 浏览器发送的请求
 
-    ```
-    GET / HTTP/1.1
-    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-    Accept-Encoding: gzip, deflate, br, zstd
-    Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
-    Connection: keep-alive
-    Host: 127.0.0.1:8550
-    Sec-Fetch-Dest: document
-    Sec-Fetch-Mode: navigate
-    Sec-Fetch-Site: none
-    Sec-Fetch-User: ?1
-    Upgrade-Insecure-Requests: 1
-    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-    sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-    sec-ch-ua-mobile: ?0
-    sec-ch-ua-platform: "Windows"
-    
-    ```
+```
+GET / HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Host: 127.0.0.1:8550
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
 
-=== "浏览器接收的响应"
+```
 
-    ```
-    HTTP/1.1 404 Not Found
-    Server: IWebCore
-    Connection: keep-alive
-    Content-Length: 30
-    Content-Type: text/plain; charset=UTF-8
-    Keep-Alive: timeout=10, max=50
-    
-    IWebCore::IHttpNotFoundInvalid
-    
-    ```
+浏览器接收的响应
+
+```
+HTTP/1.1 404 Not Found
+Server: IWebCore
+Connection: keep-alive
+Content-Length: 30
+Content-Type: text/plain; charset=UTF-8
+Keep-Alive: timeout=10, max=50
+
+IWebCore::IHttpNotFoundInvalid
+
+```
 
 此时一个最小的服务器已经开启了。
 
@@ -222,234 +223,233 @@ qmake 是用来刷新这个项目，如果用户在命令行中执行 qmake 失�
 
 新建一个 FirstController 类，如下：
 
-=== "FirstController.h"
-    ```cpp
-    #pragma once
+> FirstController.h
+```cpp
+#pragma once
 
-    #include "http/controller/IHttpControllerInterface.h"
-    
-    class FirstController : public IHttpControllerInterface<FirstController>
-    {
-        Q_GADGET
-        $AsController(/)
-    public:
-        FirstController();
-    
-        $GetMapping(ping)
-        QString ping();
-    
-        $GetMapping(hello)
-        std::string hello();
-    
-        $GetMapping(info)
-        IJson info();
-    };
-    
-    ```
+#include "http/controller/IHttpControllerInterface.h"
+
+class FirstController : public IHttpControllerInterface<FirstController>
+{
+    Q_GADGET
+    $AsController(/)
+public:
+    FirstController();
+
+    $GetMapping(ping)
+    QString ping();
+
+    $GetMapping(hello)
+    std::string hello();
+
+    $GetMapping(info)
+    IJson info();
+};
+
+```
 
 
-=== "FirstController.cpp"
-    ```cpp
-    #include "FirstController.h"
+> FirstController.cpp
+```cpp
+#include "FirstController.h"
 
-    FirstController::FirstController()
-    {
-    
-    }
-    
-    QString FirstController::ping()
-    {
-        return "pong";
-    }
-    
-    std::string FirstController::hello()
-    {
-        return "world";
-    }
-    
-    IJson FirstController::info()
-    {
-        return IJson::object({{"name", "yuekeyuan"}});
-    }
-    
-    ```
+FirstController::FirstController()
+{
 
-=== "main.cpp"
-    ```cpp
-    #include "core/application/IApplication.h"
-    #include "http/IHttpServer.h"
+}
 
-    $EnableHttpPrintTrace(true)
-    int main(int argc, char *argv[])
-    {
-        IApplication app(argc, argv);
-    
-        IHttpServer server;
-        server.listen();
-    
-        return app.run();
-    }
-    ```
+QString FirstController::ping()
+{
+    return "pong";
+}
 
-=== "server.pro"
-    ```pro
-    QT -= gui
+std::string FirstController::hello()
+{
+    return "world";
+}
 
-    CONFIG += c++17 console
-    CONFIG -= app_bundle
-    
-    DEFINES += QT_DEPRECATED_WARNINGS
-    
-    SOURCES += \
-            FirstController.cpp \
-            main.cpp
-    
-    HEADERS += \
-            FirstController.h
-    
-    include($$(IQMakeCore))
-    IQMakeCoreInit()
-    include($$PWD/.package.pri)
-    ```
+IJson FirstController::info()
+{
+    return IJson::object({{"name", "yuekeyuan"}});
+}
+
+```
+
+> main.cpp
+```cpp
+#include "core/application/IApplication.h"
+#include "http/IHttpServer.h"
+
+$EnableHttpPrintTrace(true)
+int main(int argc, char *argv[])
+{
+    IApplication app(argc, argv);
+
+    IHttpServer server;
+    server.listen();
+
+    return app.run();
+}
+```
+
+> server.pro
+```pro
+QT -= gui
+
+CONFIG += c++17 console
+CONFIG -= app_bundle
+
+DEFINES += QT_DEPRECATED_WARNINGS
+
+SOURCES += \
+        FirstController.cpp \
+        main.cpp
+
+HEADERS += \
+        FirstController.h
+
+include($$(IQMakeCore))
+IQMakeCoreInit()
+include($$PWD/.package.pri)
+```
+
 特别要说明的一点就是在 main.cpp 文件中，我们添加了一行 `$EnableHttpPrintTrace(true)` 代码，这个宏可以支持打印出 Http 请求和响应的详细信息。
 
 重新编译运行程序，输出如下：
 
-=== "console 输出"
+> console 输出
 
-    ```txt  
-     _____  _    _        _      _____
-    |_   _|| |  | |      | |    /  __ \
-      | |  | |  | |  ___ | |__  | /  \/  ___   _ __  ___
-      | |  | |/\| | / _ \| '_ \ | |     / _ \ | '__|/ _ \
-     _| |_ \  /\  /|  __/| |_) || \__/\| (_) || |  |  __/
-     \___/  \/  \/  \___||_.__/  \____/ \___/ |_|   \___|
-    
-    IHttpControllerMapping:
-    |
-        |ping
-            |::GET /ping   ==> QString FirstController::ping()
-        |info
-            |::GET /info   ==> IJson FirstController::info()
-        |hello
-            |::GET /hello  ==> std::string FirstController::hello()
+```txt  
+    _____  _    _        _      _____
+|_   _|| |  | |      | |    /  __ \
+    | |  | |  | |  ___ | |__  | /  \/  ___   _ __  ___
+    | |  | |/\| | / _ \| '_ \ | |     / _ \ | '__|/ _ \
+    _| |_ \  /\  /|  __/| |_) || \__/\| (_) || |  |  __/
+    \___/  \/  \/  \___||_.__/  \____/ \___/ |_|   \___|
+
+IHttpControllerMapping:
+|
+    |ping
+        |::GET /ping   ==> QString FirstController::ping()
+    |info
+        |::GET /info   ==> IJson FirstController::info()
+    |hello
+        |::GET /hello  ==> std::string FirstController::hello()
 
 
-    server started, listen at  "127.0.0.1:8550"
-    ```
+server started, listen at  "127.0.0.1:8550"
+```
 
 对于浏览器的请求，我们可以看到服务器返回了我们定义的字符串。
 
-=== "ping 请求"
-    === "截图"
+> ping 请求
 
-        ![image-20250715192809644](assets/image-20250715192809644.png)
 
-    === "request"
-        ```
-        GET /ping HTTP/1.1
-        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-        Accept-Encoding: gzip, deflate, br, zstd
-        Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
-        Connection: keep-alive
-        Host: 127.0.0.1:8550
-        Sec-Fetch-Dest: document
-        Sec-Fetch-Mode: navigate
-        Sec-Fetch-Site: none
-        Sec-Fetch-User: ?1
-        Upgrade-Insecure-Requests: 1
-        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-        sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-        sec-ch-ua-mobile: ?0
-        sec-ch-ua-platform: "Windows"
-        ```
+![image-20250715192809644](assets/image-20250715192809644.png)
 
-    === "response"
-        ```
-        HTTP/1.1 200 OK
-        Server: IWebCore
-        Connection: keep-alive
-        Content-Length: 4
-        Content-Type: text/plain; charset=UTF-8
-        Keep-Alive: timeout=10, max=50
+> request
+```
+GET /ping HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Host: 127.0.0.1:8550
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+```
 
-        pong
+> response
+```
+HTTP/1.1 200 OK
+Server: IWebCore
+Connection: keep-alive
+Content-Length: 4
+Content-Type: text/plain; charset=UTF-8
+Keep-Alive: timeout=10, max=50
+
+pong
+
+```
+
+> hello 请求
+
+![image-20250715192848735](assets/image-20250715192848735.png)
+
+> request
+```
+GET /hello HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Host: 127.0.0.1:8550
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+```
         
-        ```
+> response
+```
+HTTP/1.1 200 OK
+Server: IWebCore
+Connection: keep-alive
+Content-Length: 5
+Content-Type: text/plain; charset=UTF-8
+Keep-Alive: timeout=10, max=50
 
-=== "hello 请求"
-    === "截图"
+world
 
-        ![image-20250715192848735](assets/image-20250715192848735.png)
+```
 
-    === "request"
-        ```
-        GET /hello HTTP/1.1
-        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-        Accept-Encoding: gzip, deflate, br, zstd
-        Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
-        Connection: keep-alive
-        Host: 127.0.0.1:8550
-        Sec-Fetch-Dest: document
-        Sec-Fetch-Mode: navigate
-        Sec-Fetch-Site: none
-        Sec-Fetch-User: ?1
-        Upgrade-Insecure-Requests: 1
-        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-        sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-        sec-ch-ua-mobile: ?0
-        sec-ch-ua-platform: "Windows"
-        ```
-        
-    === "response"
-        ```
-        HTTP/1.1 200 OK
-        Server: IWebCore
-        Connection: keep-alive
-        Content-Length: 5
-        Content-Type: text/plain; charset=UTF-8
-        Keep-Alive: timeout=10, max=50
+> info 请求
 
-        world
-        
-        ```
+![image-20250715192931663](assets/image-20250715192931663.png)
 
-=== "info 请求"
-    === "截图"
+> request
+```
+GET /info HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Host: 127.0.0.1:8550
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+```
 
-        ![image-20250715192931663](assets/image-20250715192931663.png)
+> response
+```
+HTTP/1.1 200 OK
+Server: IWebCore
+Connection: keep-alive
+Content-Length: 20
+Content-Type: application/json; charset=UTF-8
+Keep-Alive: timeout=10, max=50
 
-    === "request"
-        ```
-        GET /info HTTP/1.1
-        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-        Accept-Encoding: gzip, deflate, br, zstd
-        Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
-        Connection: keep-alive
-        Host: 127.0.0.1:8550
-        Sec-Fetch-Dest: document
-        Sec-Fetch-Mode: navigate
-        Sec-Fetch-Site: none
-        Sec-Fetch-User: ?1
-        Upgrade-Insecure-Requests: 1
-        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-        sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-        sec-ch-ua-mobile: ?0
-        sec-ch-ua-platform: "Windows"
-        ```
+{"name":"yuekeyuan"}
 
-    === "response"
-        ```
-        HTTP/1.1 200 OK
-        Server: IWebCore
-        Connection: keep-alive
-        Content-Length: 20
-        Content-Type: application/json; charset=UTF-8
-        Keep-Alive: timeout=10, max=50
-
-        {"name":"yuekeyuan"}
-        
-        ```
+```
 
 ## 接下来的内容
 
