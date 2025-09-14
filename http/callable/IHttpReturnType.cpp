@@ -6,7 +6,7 @@ $PackageWebCoreBegin
 void *IHttpReturnType::create() const
 {
     if(m_typeId != QMetaType::UnknownType){
-        return QMetaType::create(m_typeId);
+        return QMetaType(m_typeId).create();
     }
 
     if(m_typeName == "IHttpStatus"){
@@ -20,7 +20,7 @@ void *IHttpReturnType::create() const
 void IHttpReturnType::destroy(void *ptr) const
 {
     if(m_typeId != QMetaType::UnknownType){
-        return QMetaType::destroy(m_typeId, ptr);
+        return QMetaType(m_typeId).destroy(ptr);
     }
 
     if(m_typeName == "IHttpStatus"){

@@ -323,10 +323,18 @@ void IHttpRequestImpl::parseCookie(IStringView cookie)
         if (!val.empty()) {
             auto args = val.split(IHttp::EQUAL);
             if (args.length() == 1) {
-                m_reqRaw.m_cookies.insertMulti(stash(args.first()), stash(args.first()));
+                #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                    m_reqRaw.m_cookies.insertMulti(stash(args.first()), stash(args.first()));
+                #else
+                    m_reqRaw.m_cookies.insert(stash(args.first()), stash(args.first()));
+                #endif
             }
             else {
-                m_reqRaw.m_cookies.insertMulti(stash(args.first()), stash(args.last()));
+                #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                    m_reqRaw.m_cookies.insertMulti(stash(args.first()), stash(args.last()));
+                #else
+                    m_reqRaw.m_cookies.insert(stash(args.first()), stash(args.last()));
+                #endif
             }
         }
     }

@@ -8,6 +8,7 @@ IHttpInvalidReponseContent::IHttpInvalidReponseContent(const IHttpInvalidWare &w
 {
     if(ware.m_processor){
         m_processor = [=](const IHttpResponseContent&content, IHttpResponseRaw& raw){
+            Q_UNUSED(content)
             ware.m_processor(ware, raw);
         };
     }

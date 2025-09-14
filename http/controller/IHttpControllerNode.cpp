@@ -13,7 +13,7 @@ IHttpControllerNode::IHttpControllerNode(const IHttpPathFragment& fragment)
     urlFragment = fragment;
 }
 
-bool IHttpControllerNode::operator==(const IHttpControllerNode &node)
+bool IHttpControllerNode::operator==(const IHttpControllerNode &node) const
 {
     return  urlFragment.m_name == node.urlFragment.m_name
             && urlFragment.m_type == node.urlFragment.m_type

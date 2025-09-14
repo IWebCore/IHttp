@@ -316,14 +316,14 @@ namespace detail
             return createValue(value.toString());
         case QMetaType::Short:{
             auto val = value.toInt(&ok);
-            if(ok && val >= std::numeric_limits<short>::min() && value <= std::numeric_limits<short>::max()){
+            if(ok && val >= std::numeric_limits<short>::min() && val <= std::numeric_limits<short>::max()){
                 return createValue(static_cast<short>(val));
             }
             return nullptr;
         }
         case QMetaType::UShort:{
             auto val = value.toUInt(&ok);
-            if(ok && val >= std::numeric_limits<ushort>::min() && value <= std::numeric_limits<ushort>::max()){
+            if(ok && val >= std::numeric_limits<ushort>::min() && val <= std::numeric_limits<ushort>::max()){
                 return createValue(static_cast<ushort>(val));
             }
             return nullptr;
@@ -1183,7 +1183,8 @@ void IHttpArgumentTypeDetail::createBeanTypes()
             req.setInvalid(IHttpBadRequestInvalid("bean only for json payload currently"));
             return nullptr;
         }
-        auto ptr = QMetaType::create(self.m_typeId);
+
+        auto ptr = QMetaType(self.m_typeId).create();
         auto fun = IBeanTypeManage::instance().getBeanFromJsonFun(self.m_typeId);
         if(!fun ||  !fun(ptr, req.bodyJson())){
             req.setInvalid(IHttpInternalErrorInvalid("json can not be converted to Bean"));
@@ -1192,7 +1193,7 @@ void IHttpArgumentTypeDetail::createBeanTypes()
     };
     this->m_destroyFun = [=](void* ptr){
         if(ptr){
-            QMetaType::destroy(self.m_typeId, ptr);
+            QMetaType(self.m_typeId).destroy(ptr);
         }
     };
 }

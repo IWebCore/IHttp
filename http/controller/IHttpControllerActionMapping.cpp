@@ -27,7 +27,7 @@ void IHttpControllerActionMapping::travelPrint() const
 
     qDebug().noquote() << "IHttpControllerMapping:";
     m_urlMapppings.travelPrint();
-    qDebug() << endl;
+    qDebug() << Qt::endl;
 }
 
 IHttpActionWare * IHttpControllerActionMapping::getAction(IRequest &request) const
@@ -37,7 +37,7 @@ IHttpActionWare * IHttpControllerActionMapping::getAction(IRequest &request) con
 
     auto nodePtr = &instance().m_urlMapppings;
     if(url == "/"){
-        return {nodePtr->getAction(method)};
+        return nodePtr->getAction(method);
     }
 
     IStringViewList fragments = url.split('/');

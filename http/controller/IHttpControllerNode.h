@@ -11,7 +11,7 @@ class IHttpControllerNode
 public:
     IHttpControllerNode() = default;
     explicit IHttpControllerNode(const IHttpPathFragment& fragment);
-    bool operator==(const IHttpControllerNode& node);
+    bool operator==(const IHttpControllerNode& node) const;
 
 public:
     bool isEmpty() const;

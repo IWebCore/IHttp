@@ -43,7 +43,7 @@ void generateFirstLine(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 void generateCookieHeaders(IHttpResponseRaw::RetType& ret, IHttpRequestImpl& impl)
 {
     const auto& cookies = impl.m_respRaw.m_cookies;
-    int size = 1 + 18* cookies.size() + ret.size();
+    std::size_t size = 1 + 18* cookies.size() + ret.size();
     if(ret.capacity() < size){
         ret.reserve(size * 2);
     }
@@ -221,16 +221,8 @@ std::vector<asio::const_buffer> IHttpResponseRaw::getResult()
     std::vector<asio::const_buffer> buffers;
     buffers.reserve(m_result.size());
 
-    if (false) {
-        std::memcpy(
-            buffers.data(),
-            m_result.data(),
-            m_result.size() * sizeof(asio::const_buffer)
-        );
-    } else {
-        for (const auto& sv : m_result) {
-            buffers.emplace_back(sv.data(), sv.size());
-        }
+    for (const auto& sv : m_result) {
+        buffers.emplace_back(sv.data(), sv.size());
     }
 
     return buffers;
