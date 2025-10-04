@@ -3,7 +3,6 @@
 #include "core/util/IHeaderUtil.h"
 #include "core/util/IMetaUtil.h"
 #include "core/util/IPreProcessorUtil.h"
-#include "core/unit/IRegisterMetaTypeUnit.h"
 #include "http/biscuits/IHttpMime.h"
 
 $PackageWebCoreBegin

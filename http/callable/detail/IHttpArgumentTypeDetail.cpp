@@ -644,9 +644,6 @@ void IHttpArgumentTypeDetail::createHeaderJarType()
 
 void IHttpArgumentTypeDetail::createPartTypes()
 {
-    if(this->m_typeId != QMetaType::UnknownType){
-        return;
-    }
     static QList<CreateFun> funs = {
         &IHttpArgumentTypeDetail::createMultiPartType,
         &IHttpArgumentTypeDetail::createCookiePartType,

@@ -160,7 +160,9 @@ void IHttpRequestImpl::endState()
     m_connection.doReadFinished();
 
     parseAction();
-    IHttpManage::instance().invokeFilters<IHttpFilterWare::Type::PreHandle>(m_request);
+    if(m_isValid){
+        IHttpManage::instance().invokeFilters<IHttpFilterWare::Type::PreHandle>(m_request);
+    }
     this->m_action->invoke(m_request);
 }
 

@@ -27,7 +27,7 @@ void IHttpControllerActionMapping::travelPrint() const
 
     qDebug().noquote() << "IHttpControllerMapping:";
     m_urlMapppings.travelPrint();
-    qDebug() << Qt::endl;
+    qDebug() << "\n";
 }
 
 IHttpActionWare * IHttpControllerActionMapping::getAction(IRequest &request) const

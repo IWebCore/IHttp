@@ -46,7 +46,11 @@ void IHttpCallableDetail::createArgumentNodes()
     auto types = m_metaMethod.parameterTypes();
 
     for(int i=0;i<m_metaMethod.parameterCount(); i++){
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         auto id = m_metaMethod.parameterType(i);
+#else
+        auto id = static_cast<int>(m_metaMethod.parameterMetaType(i).id());
+#endif
         m_argumentNodes.append(ISpawnUtil::construct<IHttpArgumentType>(id, types[i], names[i]));
     }
 }
