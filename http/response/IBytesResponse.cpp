@@ -3,6 +3,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpResponseInterface<IBytesResponse>;
+
 IBytesResponse::IBytesResponse()
 {
     m_raw->setMime(IHttpMime::APPLICATION_OCTET_STREAM);

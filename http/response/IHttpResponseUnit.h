@@ -4,7 +4,6 @@
 #include "core/unit/ISoloUnit.h"
 #include "core/task/ITaskPreProcessor.h"
 #include "http/response/IHttpResponseManage.h"
-#include <iostream>
 
 $PackageWebCoreBegin
 

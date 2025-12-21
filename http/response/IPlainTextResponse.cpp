@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpResponseInterface<IPlainTextResponse>;
+
 IPlainTextResponse::IPlainTextResponse()
 {
     m_raw->setMime(IHttpMime::TEXT_PLAIN_UTF8);

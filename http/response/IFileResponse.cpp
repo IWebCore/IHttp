@@ -8,6 +8,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpResponseInterface<IFileResponse>;
+
 IFileResponse::IFileResponse(const char *data)
     : IFileResponse(IString(data))
 {

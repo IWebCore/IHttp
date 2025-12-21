@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpResponseInterface<IStatusResponse>;
+
 IStatusResponse::IStatusResponse(const QString& num)
 {
     m_raw->m_status = IHttpStatus(num.toInt());

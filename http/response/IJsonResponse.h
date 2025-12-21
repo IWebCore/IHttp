@@ -56,4 +56,6 @@ IJsonResponse::IJsonResponse(const T& value)
     }
 }
 
+extern template class IHttpResponseInterface<IJsonResponse>;
+
 $PackageWebCoreEnd

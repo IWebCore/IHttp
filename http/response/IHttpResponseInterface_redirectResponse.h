@@ -34,5 +34,7 @@ private:
 
 IRedirectResponse operator"" _redirect(const char* str, size_t size);
 
+extern template class IHttpResponseInterface<IRedirectResponse>;
+
 $PackageWebCoreEnd
 

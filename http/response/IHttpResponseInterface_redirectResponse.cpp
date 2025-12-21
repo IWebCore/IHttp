@@ -3,6 +3,8 @@
 
 $PackageWebCoreBegin
 
+    template class IHttpResponseInterface<IRedirectResponse>;
+
 IRedirectResponse::IRedirectResponse()
 {
     m_raw->m_status = IHttpStatus::FOUND_302;

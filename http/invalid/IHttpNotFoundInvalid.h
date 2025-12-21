@@ -15,4 +15,6 @@ public:
     virtual void process(const IHttpInvalidWare&, IHttpResponseRaw&) const final;
 };
 
+extern template class IHttpInvalidInterface<IHttpNotFoundInvalid>;
+
 $PackageWebCoreEnd

@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpActionInterface<IHttpNotFoundAction>;
+
 void IHttpNotFoundAction::invoke(IRequest &request) const
 {
     request.setInvalid(IHttpNotFoundInvalid());

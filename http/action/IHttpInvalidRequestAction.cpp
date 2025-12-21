@@ -3,6 +3,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpActionInterface<IHttpInvalidRequestAction>;
+
 void IHttpInvalidRequestAction::invoke(IRequest &request) const
 {
     request.startWrite();

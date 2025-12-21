@@ -30,4 +30,6 @@ public:
 
 IStatusResponse operator"" _status(unsigned long long int);
 
+extern template class IHttpResponseInterface<IStatusResponse>;
+
 $PackageWebCoreEnd

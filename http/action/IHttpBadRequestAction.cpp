@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpActionInterface<IHttpBadRequestAction>;
+
 void IHttpBadRequestAction::invoke(IRequest &request) const
 {
     request.setInvalid(IHttpBadRequestInvalid());

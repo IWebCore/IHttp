@@ -33,4 +33,6 @@ public:
 
 IBytesResponse operator"" _bytes(const char* str, size_t size);
 
+extern template class IHttpResponseInterface<IBytesResponse>;
+
 $PackageWebCoreEnd

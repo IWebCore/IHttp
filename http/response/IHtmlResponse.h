@@ -36,4 +36,6 @@ public:
 
 IHtmlResponse operator"" _html(const char* str, size_t size);
 
+extern template class IHttpResponseInterface<IHtmlResponse>;
+
 $PackageWebCoreEnd

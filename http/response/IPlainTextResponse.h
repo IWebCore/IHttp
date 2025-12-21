@@ -36,6 +36,8 @@ public:
 
 IPlainTextResponse operator"" _text(const char* str, size_t size);
 
+extern template class IHttpResponseInterface<IPlainTextResponse>;
+
 $PackageWebCoreEnd
 
 

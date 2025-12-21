@@ -3,6 +3,8 @@
 
 $PackageWebCoreBegin
 
+    template class IHttpInvalidInterface<IHttpNotFoundInvalid>;
+
 IHttpNotFoundInvalid::IHttpNotFoundInvalid()
     : IHttpInvalidInterface(IHttpStatus::NOT_FOUND_404)
 {

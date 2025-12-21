@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpActionInterface<IHttpInternalErrorAction>;
+
 void IHttpInternalErrorAction::invoke(IRequest &request) const
 {
     request.setInvalid(IHttpInternalErrorInvalid());

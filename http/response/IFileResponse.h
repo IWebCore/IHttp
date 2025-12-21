@@ -38,4 +38,6 @@ public:
 
 IFileResponse operator"" _file(const char* str, size_t size);
 
+extern template class IHttpResponseInterface<IFileResponse>;
+
 $PackageWebCoreEnd

@@ -4,6 +4,8 @@
 
 $PackageWebCoreBegin
 
+template class IHttpResponseInterface<IJsonResponse>;
+
 IJsonResponse::IJsonResponse()
 {
     m_raw->setMime(IHttpMime::APPLICATION_JSON_UTF8); // this must be initialized, the only return type;

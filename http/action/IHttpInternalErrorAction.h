@@ -13,4 +13,6 @@ public:
     virtual void invoke(IRequest &request) const final;
 };
 
+extern template class IHttpActionInterface<IHttpInternalErrorAction>;
+
 $PackageWebCoreEnd
