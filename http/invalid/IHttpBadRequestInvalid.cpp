@@ -2,6 +2,8 @@
 
 $PackageWebCoreBegin
 
+    template class IHttpInvalidInterface<IHttpBadRequestInvalid>;
+
 IHttpBadRequestInvalid::IHttpBadRequestInvalid()
     : IHttpInvalidInterface(IHttpStatus::BAD_REQUEST_400)
 {

@@ -7,6 +7,8 @@
 
 $PackageWebCoreBegin
 
+// TODO: flatten this interface
+
 class IStatusResponse;
 class IRedirectResponse;
 template<typename T, bool enabled=true>

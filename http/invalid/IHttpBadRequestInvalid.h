@@ -15,4 +15,6 @@ public:
     IHttpBadRequestInvalid(const IString& description);
 };
 
+extern template class IHttpInvalidInterface<IHttpBadRequestInvalid>;
+
 $PackageWebCoreEnd
