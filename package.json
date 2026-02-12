@@ -6,6 +6,7 @@
     "license":"AGPL-3.0-only",
     "summary":"http mvc server framework by annotation",
     "keywords": ["http", "mvc", "server", "framework", "IWebCore", "yuekeyuan", "annotation"],
+    "autoScan": true,
     "dependencies": {
         "ITcp": "*",
         "ICore": "*"
