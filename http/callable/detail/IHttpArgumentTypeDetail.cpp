@@ -859,6 +859,9 @@ void IHttpArgumentTypeDetail::createSessionType()
 
     auto self = *this;
     this->m_createFun = [=](IRequest& req) -> void*{
+        if(!IHttpSession::isSessionEnabled()){
+            qFatal("session not enabled");
+        }
         if(req.isSessionExist()){
             auto value = req.session().getValue(self.m_name.toQString());
             if(value.isValid()){
@@ -1082,80 +1085,78 @@ void IHttpArgumentTypeDetail::createNormalMixedType()
 
     auto self = *this;
     this->m_createFun = [=](IRequest& req) -> void* {
-        while(true){
-            // form
-            if(req.mime() == IHttpMime::APPLICATION_WWW_FORM_URLENCODED
-                    && req.bodyFormParameters().contains(self.m_name)){
-                auto data = req.bodyFormParameters()[self.m_name];
-                auto ptr = detail::fromIStringToPtr(data, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
-                }
-                return ptr;
+        // form
+        if(req.mime() == IHttpMime::APPLICATION_WWW_FORM_URLENCODED
+                && req.bodyFormParameters().contains(self.m_name)){
+            auto data = req.bodyFormParameters()[self.m_name];
+            auto ptr = detail::fromIStringToPtr(data, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("form field value not proper"));
             }
+            return ptr;
+        }
 
-            // multi part
-            if(req.mime() == IHttpMime::MULTIPART_FORM_DATA
-                    && req.multiPartJar().contain(self.m_name)){
-                const auto& value = req.multiPartJar().getMultiPart(self.m_name).m_content;
-                auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("multipart field value not proper"));
-                }
-                return ptr;
+        // multi part
+        if(req.mime() == IHttpMime::MULTIPART_FORM_DATA
+                && req.multiPartJar().contain(self.m_name)){
+            const auto& value = req.multiPartJar().getMultiPart(self.m_name).m_content;
+            auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("multipart field value not proper"));
             }
-            // json
-            auto pathStr = QString("/").append(self.m_name.toQString()).toStdString();
-            IJson::json_pointer path(pathStr);
-            if((req.mime() != IHttpMime::APPLICATION_JSON && req.mime() != IHttpMime::APPLICATION_JSON_UTF8)
-                    && req.impl().m_reqRaw.m_json.contains(path)){
-                return detail::fromIJsonToPtr(req.impl().m_reqRaw.m_json[path], self.m_typeId, self.m_typeName);
+            return ptr;
+        }
+        // json
+        auto pathStr = QString("/").append(self.m_name.toQString()).toStdString();
+        IJson::json_pointer path(pathStr);
+        if((req.mime() != IHttpMime::APPLICATION_JSON && req.mime() != IHttpMime::APPLICATION_JSON_UTF8)
+                && req.impl().m_reqRaw.m_json.contains(path)){
+            return detail::fromIJsonToPtr(req.impl().m_reqRaw.m_json[path], self.m_typeId, self.m_typeName);
+        }
+        // query
+        if(req.queryParameters().contains(self.m_name)){
+            auto value = req.queryParameters().value(self.m_name);
+            auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("query field value not proper"));
             }
-            // query
-            if(req.queryParameters().contains(self.m_name)){
-                auto value = req.queryParameters().value(self.m_name);
-                auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("query field value not proper"));
-                }
-                return ptr;
+            return ptr;
+        }
+        // path
+        if(req.pathParameters().contains(self.m_name)){
+            auto value =  req.pathParameters().value(self.m_name);
+            auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("path field value not proper"));
             }
-            // path
-            if(req.pathParameters().contains(self.m_name)){
-                auto value =  req.pathParameters().value(self.m_name);
-                auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("path field value not proper"));
-                }
-                return ptr;
+            return ptr;
+        }
+        // cookie
+        if(req.cookieJar().containRequestCookieKey(self.m_name)){
+            auto value = req.cookieJar().getRequestCookie(self.m_name).m_value;
+            auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("cookie field value not proper"));
             }
-            // cookie
-            if(req.cookieJar().containRequestCookieKey(self.m_name)){
-                auto value = req.cookieJar().getRequestCookie(self.m_name).m_value;
-                auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("cookie field value not proper"));
-                }
-                return ptr;
+            return ptr;
+        }
+        // session
+        if(IHttpSession::isSessionEnabled() && req.session().contains(self.m_name.toQString())){
+            auto value = req.session().getValue(self.m_name.toQString());
+            auto ptr = detail::fromQVariantToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("session field value not proper"));
             }
-            // session
-            if(req.session().contains(self.m_name.toQString())){
-                auto value = req.session().getValue(self.m_name.toQString());
-                auto ptr = detail::fromQVariantToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("session field value not proper"));
-                }
-                return ptr;
+            return ptr;
+        }
+        // header
+        if(req.headerJar().containRequestHeaderKey(self.m_name)){
+            auto value = req.headerJar().getRequestHeaderValue(self.m_name);
+            auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
+            if(!ptr){
+                req.setInvalid(IHttpBadRequestInvalid("header field value not proper"));
             }
-            // header
-            if(req.headerJar().containRequestHeaderKey(self.m_name)){
-                auto value = req.headerJar().getRequestHeaderValue(self.m_name);
-                auto ptr = detail::fromIStringToPtr(value, self.m_typeId, self.m_typeName);
-                if(!ptr){
-                    req.setInvalid(IHttpBadRequestInvalid("header field value not proper"));
-                }
-                return ptr;
-            }
+            return ptr;
         }
 
         req.setInvalid(IHttpInternalErrorInvalid("parameter not found"));

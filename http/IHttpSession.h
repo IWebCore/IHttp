@@ -15,6 +15,7 @@ public:
     IHttpSession(IHttpRequestImpl& m_impl);
 
 public:
+    static bool isSessionEnabled();
     static bool isSessionExist(const IRequest& request);
 
 public:

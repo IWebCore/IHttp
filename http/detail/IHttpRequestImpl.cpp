@@ -1,22 +1,17 @@
 ﻿#include "IHttpRequestImpl.h"
 
-#include "core/util/IHeaderUtil.h"
 #include "core/config/IProfileImport.h"
 #include "http/IRequest.h"
 #include "http/IHttpManage.h"
 #include "http/IHttpConstant.h"
 #include "http/IHttpSession.h"
 #include "http/action/IHttpActionWare.h"
-#include "http/controller/IHttpControllerAction.h"
 #include "http/detail/IHttpRequestRaw.h"
 #include "http/invalid/IHttpBadRequestInvalid.h"
-#include "http/invalid/IHttpNotFoundInvalid.h"
-#include "http/invalid/IHttpInternalErrorInvalid.h"
 #include "http/response/IHttpResponseWare.h"
 #include "http/detail/IHttpChunkedFlow.h"
 #include "tcp/ITcpConnection.h"
-#include <algorithm>
-#include <regex>
+
 #include <utility>
 
 $PackageWebCoreBegin
@@ -709,8 +704,8 @@ bool IHttpRequestImpl::isSessionExist() const
 
 IHttpSession &IHttpRequestImpl::session()
 {
-    static $Bool enabled{"/http/session/enabled", false};
-    if(! *enabled){
+    static bool enabled = IHttpSession::isSessionEnabled();
+    if(! enabled){
         qFatal("Session not enabled, please check your configuration");
     }
 

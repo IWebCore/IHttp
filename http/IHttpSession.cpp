@@ -1,10 +1,9 @@
 ﻿#include "IHttpSession.h"
-#include "core/abort/IGlobalAbort.h"
+#include "core/config/IProfileImport.h"
 #include "http/IRequest.h"
-#include "http/biscuits/IHttpHeader.h"
 #include "http/IHttpConstant.h"
 #include "http/session/IHttpSessionManager.h"
-#include "http/session/IHttpSessionInterface.h"
+#include "http/session/IHttpSessionWare.h"
 #include "http/detail/IHttpRequestRaw.h"
 #include "http/detail/IHttpRequestImpl.h"
 
@@ -24,6 +23,12 @@ IHttpSession::IHttpSession(IHttpRequestImpl& request)
 
     m_isNewSession = true;
     m_sessionId = m_sessionWare.createNewId();
+}
+
+bool IHttpSession::isSessionEnabled()
+{
+    static $Bool enabled{"/http/session/enabled", false};
+    return *enabled;
 }
 
 bool IHttpSession::isSessionExist(const IRequest &request)
