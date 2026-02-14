@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "core/base/IStringViewStash.h"
-#include "core/util/IHeaderUtil.h"
 #include "http/biscuits/IHttpMime.h"
 #include "http/biscuits/IHttpStatus.h"
 #include "http/biscuits/IHttpHeader.h"

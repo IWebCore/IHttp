@@ -2,7 +2,6 @@
 
 #include "core/util/IPackageUtil.h"
 #include "core/util/ISpawnUtil.h"
-#include "core/abort/IAbortInterface.h"
 
 $PackageWebCoreBegin
 

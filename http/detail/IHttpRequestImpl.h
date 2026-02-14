@@ -1,12 +1,5 @@
 ﻿#pragma once
 
-#include "core/util/IConvertUtil.h"
-#include "core/base/IResult.h"
-#include "http/biscuits/IHttpHeader.h"
-#include "http/biscuits/IHttpVersion.h"
-#include "http/biscuits/IHttpMime.h"
-#include "http/biscuits/IHttpStatus.h"
-#include "http/biscuits/IHttpMethod.h"
 #include "http/biscuits/IHttpAttribute.h"
 #include "http/action/IHttpActionWare.h"
 #include "http/detail/IHttpResponseRaw.h"
